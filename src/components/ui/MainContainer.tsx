@@ -6,6 +6,7 @@ import NewTeamContainerHeader from "./NewTeam/NewTeamContainerHeader";
 import NewTeamOptions from "./NewTeam/NewTeamOptions";
 import Image from "next/image";
 import { useState } from "react";
+import NewTeamUnitOverview from "./NewTeam/NewTeamUnitOverview";
 
 export default function MainContainer() {
   const [creatingTeam, setCreatingTeam] = useState(false);
@@ -21,6 +22,7 @@ export default function MainContainer() {
           <div className="flex flex-col gap-4">
             <NewTeamContainerHeader handleCreatingTeam={handleCreatingTeam} />
             <NewTeamOptions />
+            <NewTeamUnitOverview />
           </div>
         ) : (
           <>
