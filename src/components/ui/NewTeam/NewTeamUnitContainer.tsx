@@ -1,6 +1,8 @@
 import { Unit } from "@/d";
 import UnitSmallDetail from "../Units/UnitSmallDetail";
 import Image from "next/image";
+import { Button } from "@nextui-org/react";
+
 interface Props {
   units: Unit[];
 }
@@ -40,7 +42,18 @@ export default function NewTeamUnitContainer({ units }: Props) {
             />
             <span>{cost}</span>
           </div>
-          <div className="text-xs">{numUnits} units</div>
+          <div className="flex flex-row gap-4 items-center">
+            <span className="text-xs text-neutral-400">{numUnits} units</span>
+            <Button
+              className="bg-neutral-600 rounded-2xl text-white h-6"
+              size="sm"
+              onClick={() => {
+                console.log("adding all units...");
+              }}
+            >
+              Add All
+            </Button>
+          </div>
         </div>
         <div className="flex flex-row flex-wrap justify-start">
           {units.map((unit) => {
