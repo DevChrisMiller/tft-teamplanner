@@ -8,7 +8,7 @@ interface Props {
 
 export default function UnitSmallDetail({ unit, color }: Props) {
   return (
-    <div className=" text-center m-2 w-14">
+    <div className=" text-center m-1 w-16">
       <Image
         onClick={() => {
           console.log(`adding ${unit.name} to team`);
@@ -16,10 +16,10 @@ export default function UnitSmallDetail({ unit, color }: Props) {
         className="border-medium rounded-large border-green-100 cursor-pointer"
         src={`/splash-art/${unit.imgsrc}`}
         alt={unit.name}
-        height={60}
-        width={60}
+        height={64}
+        width={64}
       />
-      <p className="text-small break-normal">{unit.name}</p>
+      <p className="text-xs break-normal">{unit.name}</p>
     </div>
   );
 }

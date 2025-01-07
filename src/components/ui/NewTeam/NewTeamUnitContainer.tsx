@@ -8,6 +8,7 @@ export default function NewTeamUnitContainer({ units }: Props) {
   console.log(units[1].cost);
   console.log(units);
   const cost: number = units[1].cost;
+  const numUnits: number = units.length;
 
   const getBgColorClass = (cost: number): string => {
     const colorMap: Record<number, string> = {
@@ -28,15 +29,18 @@ export default function NewTeamUnitContainer({ units }: Props) {
           cost
         )} w-96 rounded-xl h-fit bg-opacity-40 flex flex-col p-2 mb-3 mr-2`}
       >
-        <div className="flex flex-row m-2">
-          <Image
-            className="mr-2"
-            src="/general/gold-icon.webp"
-            alt="gold icon"
-            height={12}
-            width={20}
-          />
-          <span>{cost}</span>
+        <div className="flex flex-row m-2 justify-between items-center">
+          <div className="flex flex-row items-center">
+            <Image
+              className="mr-2"
+              src="/general/gold-icon.webp"
+              alt="gold icon"
+              height={12}
+              width={20}
+            />
+            <span>{cost}</span>
+          </div>
+          <div className="text-xs">{numUnits} units</div>
         </div>
         <div className="flex flex-row flex-wrap justify-start">
           {units.map((unit) => {
