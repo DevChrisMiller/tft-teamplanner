@@ -17,7 +17,7 @@ export default function NewTeamUnitOverview() {
   );
 
   return (
-    <div className="h-[50vh] overflow-auto w-fit no-scrollbar">
+    <div className="h-[50vh] overflow-auto flex-shrink-0 no-scrollbar">
       {Object.keys(groupedByCost).map((key: string) => {
         return (
           <NewTeamUnitContainer units={groupedByCost[Number(key)]} key={key} />

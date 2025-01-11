@@ -8,6 +8,7 @@ import Image from "next/image";
 import { useState } from "react";
 import NewTeamUnitOverview from "./NewTeam/NewTeamUnitOverview";
 import NewTeamTraitContainer from "./NewTeam/NewTeamTraitContainer";
+import NewTeamContainer from "./NewTeam/NewTeamContainer";
 
 export default function MainContainer() {
   const [creatingTeam, setCreatingTeam] = useState(false);
@@ -26,6 +27,7 @@ export default function MainContainer() {
             <div className="flex flex-row">
               <NewTeamUnitOverview />
               <NewTeamTraitContainer />
+              <NewTeamContainer />
             </div>
           </div>
         ) : (

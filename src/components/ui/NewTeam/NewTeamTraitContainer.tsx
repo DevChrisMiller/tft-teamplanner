@@ -2,10 +2,10 @@ import Image from "next/image";
 
 export default function NewTeamTraitContainer() {
   const emptyTraits = 10;
-
+  //implement ternary based on selectedUnits state
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex flex-col flex-shrink-0 min-w-36">
         {[...Array(emptyTraits)].map((e, i) => {
           return (
             <div className="flex flex-row m-2" key={i}>
