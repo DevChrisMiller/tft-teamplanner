@@ -20,7 +20,7 @@ export default function UnitSmallDetail({ unit, color }: Props) {
         width={64}
       />
       <div className="flex flex-row items-center bg-neutral-600 w-fit h-5 justify-self-center rounded-b-lg p-0.5">
-        {unit.traits.map((trait) => {
+        {unit.traits.map((trait, i) => {
           return (
             <Image
               className="mx-0.5"
@@ -28,6 +28,7 @@ export default function UnitSmallDetail({ unit, color }: Props) {
               alt={`${trait}`}
               height={16}
               width={16}
+              key={i}
             />
           );
         })}

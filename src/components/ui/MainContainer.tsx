@@ -7,6 +7,7 @@ import NewTeamOptions from "./NewTeam/NewTeamOptions";
 import Image from "next/image";
 import { useState } from "react";
 import NewTeamUnitOverview from "./NewTeam/NewTeamUnitOverview";
+import NewTeamTraitContainer from "./NewTeam/NewTeamTraitContainer";
 
 export default function MainContainer() {
   const [creatingTeam, setCreatingTeam] = useState(false);
@@ -17,12 +18,15 @@ export default function MainContainer() {
 
   return (
     <>
-      <div className="bg-neutral-900 rounded-3xl w-full p-6 flex flex-col">
+      <main className="bg-neutral-900 rounded-3xl w-full p-6 flex flex-col">
         {creatingTeam ? (
           <div className="flex flex-col gap-4">
             <NewTeamContainerHeader handleCreatingTeam={handleCreatingTeam} />
             <NewTeamOptions />
-            <NewTeamUnitOverview />
+            <div className="flex flex-row">
+              <NewTeamUnitOverview />
+              <NewTeamTraitContainer />
+            </div>
           </div>
         ) : (
           <>
@@ -44,7 +48,7 @@ export default function MainContainer() {
             </div>
           </>
         )}
-      </div>
+      </main>
       <FloatingWindowOption />
     </>
   );
