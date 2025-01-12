@@ -8,7 +8,11 @@ import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { Switch } from "@nextui-org/react";
 import { useState } from "react";
 
-export default function NewTeamOptions() {
+interface Props {
+  handleClearTeam: () => void;
+}
+
+export default function NewTeamOptions({ handleClearTeam }: Props) {
   const [isTraitFilter, setIsTraitFilter] = useState(false);
 
   return (
@@ -60,7 +64,7 @@ export default function NewTeamOptions() {
       <Button
         className="bg-neutral-800 h-8 rounded-2xl text-white hover:bg-red-900"
         onClick={() => {
-          console.log("clearing team...");
+          handleClearTeam();
         }}
       >
         <FontAwesomeIcon icon={faX} className="h-3 w-3" /> Clear

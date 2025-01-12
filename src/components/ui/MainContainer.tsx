@@ -23,7 +23,10 @@ export default function MainContainer() {
     currentTeam.includes(unit)
       ? setCurrentTeam((prevTeam) => prevTeam.filter((u) => u.id !== unit.id))
       : setCurrentTeam((prevTeam) => [...prevTeam, unit]);
-    console.log(currentTeam);
+  };
+
+  const handleClearTeam = () => {
+    setCurrentTeam([]);
   };
 
   return (
@@ -32,7 +35,7 @@ export default function MainContainer() {
         {creatingTeam ? (
           <div className="flex flex-col gap-4">
             <NewTeamContainerHeader handleCreatingTeam={handleCreatingTeam} />
-            <NewTeamOptions />
+            <NewTeamOptions handleClearTeam={handleClearTeam} />
             <div className="flex flex-row">
               <NewTeamUnitOverview handleUpdateTeam={handleUpdateTeam} />
               <NewTeamTraitContainer />
