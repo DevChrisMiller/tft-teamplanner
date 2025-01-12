@@ -21,7 +21,7 @@ export default function NewTeamUnitOverview({ handleUpdateTeam }: Props) {
   );
 
   return (
-    <div className="h-[75vh] lg:h-[50vh] overflow-auto min-w-12 lg:w-fit lg:flex-shrink-0 no-scrollbar">
+    <div className="h-[75vh] md:h-[60vh] lg:h-[50vh] overflow-auto min-w-12 lg:w-fit lg:flex-shrink-0 no-scrollbar">
       {Object.keys(groupedByCost).map((key: string) => {
         return (
           <NewTeamUnitContainer
