@@ -5,7 +5,7 @@ export default function NewTeamTraitContainer() {
   //implement ternary based on selectedUnits state
   return (
     <>
-      <div className="flex flex-col flex-shrink-0 min-w-36">
+      <div className="flex flex-col flex-shrink-0 min-w-32">
         {[...Array(emptyTraits)].map((e, i) => {
           return (
             <div className="flex flex-row m-2" key={i}>

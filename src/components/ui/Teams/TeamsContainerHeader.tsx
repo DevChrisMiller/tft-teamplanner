@@ -8,9 +8,9 @@ interface Props {
 }
 export default function TeamsContainerHeader({ handleCreatingTeam }: Props) {
   return (
-    <div className="flex">
-      <h1 className="text-2xl font-bold w-full">My Teams</h1>
-      <div className="flex w-full justify-end h-min">
+    <div className="flex flex-wrap gap-2 w-full justify-between">
+      <h1 className="hidden md:block text-2xl font-bold w-fit">My Teams</h1>
+      <div className="flex w-fit h-min">
         <TeamCodeInput />
         <Button
           className="bg-white h-8 rounded-2xl text-black"

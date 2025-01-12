@@ -10,7 +10,7 @@ export default function TeamCodeInput() {
       size="sm"
       radius="lg"
       color="default"
-      className="w-64 mr-2"
+      className="max-w-64 min-w-24 mr-2"
       startContent={
         <FontAwesomeIcon icon={faClipboard} className="text-neutral-400 mx-1" />
       }

@@ -29,7 +29,7 @@ export default function NewTeamUnitContainer({ units }: Props) {
       <div
         className={`${getBgColorClass(
           cost
-        )} w-96 rounded-xl h-fit bg-opacity-40 flex flex-col p-2 mb-3 mr-2`}
+        )} min-w-32 max-w-96 rounded-xl h-fit bg-opacity-40 flex flex-col p-2 mb-3 mr-2`}
       >
         <div className="flex flex-row m-2 justify-between items-center">
           <div className="flex flex-row items-center">
@@ -43,7 +43,9 @@ export default function NewTeamUnitContainer({ units }: Props) {
             <span>{cost}</span>
           </div>
           <div className="flex flex-row gap-4 items-center">
-            <span className="text-xs text-neutral-400">{numUnits} units</span>
+            <span className="text-xs text-neutral-400 hidden lg:block">
+              {numUnits} units
+            </span>
             <Button
               className="bg-neutral-600 rounded-2xl text-white h-6"
               size="sm"
