@@ -9,12 +9,21 @@ import { useState } from "react";
 import NewTeamUnitOverview from "./NewTeam/NewTeamUnitOverview";
 import NewTeamTraitContainer from "./NewTeam/NewTeamTraitContainer";
 import NewTeamContainer from "./NewTeam/NewTeamContainer";
+import { Unit } from "@/d";
 
 export default function MainContainer() {
   const [creatingTeam, setCreatingTeam] = useState(false);
+  const [currentTeam, setCurrentTeam] = useState<Unit[]>([]);
 
   const handleCreatingTeam = (creatingTeam: boolean) => {
     setCreatingTeam(creatingTeam);
+  };
+
+  const handleUpdateTeam = (unit: Unit) => {
+    currentTeam.includes(unit)
+      ? setCurrentTeam((prevTeam) => prevTeam.filter((u) => u.id !== unit.id))
+      : setCurrentTeam((prevTeam) => [...prevTeam, unit]);
+    console.log(currentTeam);
   };
 
   return (
@@ -25,9 +34,9 @@ export default function MainContainer() {
             <NewTeamContainerHeader handleCreatingTeam={handleCreatingTeam} />
             <NewTeamOptions />
             <div className="flex flex-row">
-              <NewTeamUnitOverview />
+              <NewTeamUnitOverview handleUpdateTeam={handleUpdateTeam} />
               <NewTeamTraitContainer />
-              <NewTeamContainer />
+              <NewTeamContainer currentTeam={currentTeam} />
             </div>
           </div>
         ) : (

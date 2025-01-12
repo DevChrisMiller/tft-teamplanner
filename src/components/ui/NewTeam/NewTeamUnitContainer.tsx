@@ -5,10 +5,12 @@ import { Button } from "@nextui-org/react";
 
 interface Props {
   units: Unit[];
+  handleUpdateTeam: (x: Unit) => void;
 }
-export default function NewTeamUnitContainer({ units }: Props) {
-  console.log(units[1].cost);
-  console.log(units);
+export default function NewTeamUnitContainer({
+  units,
+  handleUpdateTeam,
+}: Props) {
   const cost: number = units[1].cost;
   const numUnits: number = units.length;
 
@@ -61,6 +63,7 @@ export default function NewTeamUnitContainer({ units }: Props) {
           {units.map((unit) => {
             return (
               <UnitSmallDetail
+                handleUpdateTeam={handleUpdateTeam}
                 unit={unit}
                 color={getBgColorClass(cost)}
                 key={unit.name}

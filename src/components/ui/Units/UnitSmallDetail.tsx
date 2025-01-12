@@ -4,15 +4,18 @@ import { Unit } from "@/d";
 interface Props {
   unit: Unit;
   color: string;
+  handleUpdateTeam: (x: Unit) => void;
 }
 
-export default function UnitSmallDetail({ unit, color }: Props) {
+export default function UnitSmallDetail({
+  unit,
+  color,
+  handleUpdateTeam,
+}: Props) {
   return (
     <div className="text-center mx-1 my-2 w-16">
       <Image
-        onClick={() => {
-          console.log(`adding ${unit.name} to team`);
-        }}
+        onClick={() => handleUpdateTeam(unit)}
         className="border-medium rounded-large border-green-100 cursor-pointer"
         src={`/splash-art/${unit.imgsrc}`}
         alt={unit.name}
