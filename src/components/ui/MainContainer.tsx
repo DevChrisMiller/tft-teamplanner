@@ -13,20 +13,28 @@ import { Unit } from "@/d";
 
 export default function MainContainer() {
   const [creatingTeam, setCreatingTeam] = useState(false);
-  const [currentTeam, setCurrentTeam] = useState<Unit[]>([]);
+  const [currentTeam, setCurrentTeam] = useState<(Unit | null)[]>(
+    Array(10).fill(null)
+  );
 
   const handleCreatingTeam = (creatingTeam: boolean) => {
     setCreatingTeam(creatingTeam);
   };
 
-  const handleUpdateTeam = (unit: Unit) => {
-    currentTeam.includes(unit)
-      ? setCurrentTeam((prevTeam) => prevTeam.filter((u) => u.id !== unit.id))
-      : setCurrentTeam((prevTeam) => [...prevTeam, unit]);
+  const handleUpdateTeam = (unit: Unit, index: number) => {
+    setCurrentTeam((prevTeam) => {
+      const newTeam = [...prevTeam];
+      if (newTeam[index]?.id === unit.id) {
+        newTeam[index] = null;
+      } else {
+        newTeam[index] = unit;
+      }
+      return newTeam;
+    });
   };
 
   const handleClearTeam = () => {
-    setCurrentTeam([]);
+    setCurrentTeam(Array(10).fill(null));
   };
 
   return (
@@ -37,7 +45,10 @@ export default function MainContainer() {
             <NewTeamContainerHeader handleCreatingTeam={handleCreatingTeam} />
             <NewTeamOptions handleClearTeam={handleClearTeam} />
             <div className="flex flex-row gap-2 h-[600px]">
-              <NewTeamUnitOverview handleUpdateTeam={handleUpdateTeam} />
+              <NewTeamUnitOverview
+                handleUpdateTeam={handleUpdateTeam}
+                currentTeam={currentTeam}
+              />
               <NewTeamTraitContainer />
               <NewTeamContainer currentTeam={currentTeam} />
             </div>

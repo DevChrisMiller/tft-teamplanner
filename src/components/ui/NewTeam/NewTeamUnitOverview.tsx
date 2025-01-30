@@ -4,10 +4,14 @@ import { Unit } from "@/d";
 import { group } from "console";
 
 interface Props {
-  handleUpdateTeam: (x: Unit) => void;
+  handleUpdateTeam: (unit: Unit, index: number) => void;
+  currentTeam: (Unit | null)[];
 }
 
-export default function NewTeamUnitOverview({ handleUpdateTeam }: Props) {
+export default function NewTeamUnitOverview({
+  handleUpdateTeam,
+  currentTeam,
+}: Props) {
   const groupedByCost = UnitsArray.reduce<Record<number, Unit[]>>(
     (result, unit) => {
       const key = unit.cost;
@@ -27,6 +31,7 @@ export default function NewTeamUnitOverview({ handleUpdateTeam }: Props) {
           <NewTeamUnitContainer
             units={groupedByCost[Number(key)]}
             handleUpdateTeam={handleUpdateTeam}
+            currentTeam={currentTeam}
             key={key}
           />
         );

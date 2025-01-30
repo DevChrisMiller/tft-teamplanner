@@ -5,11 +5,13 @@ import { Button } from "@nextui-org/react";
 
 interface Props {
   units: Unit[];
-  handleUpdateTeam: (x: Unit) => void;
+  handleUpdateTeam: (unit: Unit, index: number) => void;
+  currentTeam: (Unit | null)[];
 }
 export default function NewTeamUnitContainer({
   units,
   handleUpdateTeam,
+  currentTeam,
 }: Props) {
   const cost: number = units[1].cost;
   const numUnits: number = units.length;
@@ -63,7 +65,22 @@ export default function NewTeamUnitContainer({
           {units.map((unit) => {
             return (
               <UnitSmallDetail
-                handleUpdateTeam={handleUpdateTeam}
+                handleUpdateTeam={(unit) => {
+                  const existingIndex = currentTeam.findIndex(
+                    (slot) => slot?.id === unit.id
+                  );
+
+                  if (existingIndex !== -1) {
+                    handleUpdateTeam(unit, existingIndex);
+                  } else {
+                    const firstEmptyIndex = currentTeam.findIndex(
+                      (slot) => slot === null
+                    );
+                    if (firstEmptyIndex !== -1) {
+                      handleUpdateTeam(unit, firstEmptyIndex);
+                    }
+                  }
+                }}
                 unit={unit}
                 color={getBgColorClass(cost)}
                 key={unit.name}
