@@ -9,7 +9,7 @@ export default function NewTeamContainer({ currentTeam }: Props) {
 
   return (
     <>
-      <div className="grid lg:grid-cols-5 sm:grid-cols-1 md:grid-cols-3 gap-4 m-2 h-fit w-full">
+      <div className="grid lg:grid-cols-5 sm:grid-cols-1 md:grid-cols-3 gap-4 m-2 w-full overflow-y-auto no-scrollbar">
         {currentTeam.map((unit, i) => {
           return (
             <div

@@ -31,12 +31,12 @@ export default function MainContainer() {
 
   return (
     <>
-      <main className="bg-neutral-900 rounded-3xl w-full p-2 lg:p-6 md:p-4 sm:p-2 min-h-[700px] lg:max-h-[60vh] md:max-h-[80vh] sm:max-h-[100vh] flex flex-col">
+      <main className="bg-neutral-900 rounded-3xl w-full p-2 lg:p-6 md:p-4 sm:p-2 flex flex-col h-full">
         {creatingTeam ? (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 h-full">
             <NewTeamContainerHeader handleCreatingTeam={handleCreatingTeam} />
             <NewTeamOptions handleClearTeam={handleClearTeam} />
-            <div className="flex flex-row">
+            <div className="flex flex-row gap-2 h-[600px]">
               <NewTeamUnitOverview handleUpdateTeam={handleUpdateTeam} />
               <NewTeamTraitContainer />
               <NewTeamContainer currentTeam={currentTeam} />

@@ -49,7 +49,7 @@ export default function NewTeamUnitContainer({
               {numUnits} units
             </span>
             <Button
-              className="bg-neutral-600 rounded-2xl text-white h-6"
+              className="bg-neutral-600 rounded-2xl text-white h-6 hidden md:block"
               size="sm"
               onClick={() => {
                 console.log("adding all units...");

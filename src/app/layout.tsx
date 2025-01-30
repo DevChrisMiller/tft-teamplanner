@@ -10,7 +10,6 @@ export const metadata: Metadata = {
   description: "Plan your TFT teams!",
 };
 
-// In RootLayout:
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -18,13 +17,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full dark">
-      <body className="font-sans antialiased bg-black min-h-full">
+      <body className="font-sans antialiased bg-black h-full">
         <Providers>
-          <div className="flex flex-col min-h-screen">
+          <div className="flex flex-col h-full">
             <Navbar />
-            <main className="flex-1 w-full max-w-7xl px-8 mx-auto">
+            <div className="flex-1 w-full max-w-7xl px-8 mx-auto overflow-hidden">
               {children}
-            </main>
+            </div>
             <Footer />
           </div>
         </Providers>
