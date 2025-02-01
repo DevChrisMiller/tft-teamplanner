@@ -49,7 +49,7 @@ export default function MainContainer() {
                 handleUpdateTeam={handleUpdateTeam}
                 currentTeam={currentTeam}
               />
-              <NewTeamTraitContainer />
+              <NewTeamTraitContainer currentTeam={currentTeam} />
               <NewTeamContainer currentTeam={currentTeam} />
             </div>
           </div>
