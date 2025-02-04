@@ -41,16 +41,25 @@ export default function NewTeamTraitContainer({ currentTeam }: Props) {
         {currentTeam.some((u) => u !== null)
           ? traitArray.map((trait, i) => {
               return (
-                <div key={i} className="flex items-center">
+                <div key={i} className="flex items-center m-2">
                   <Image
-                    src={`/traits/${trait.name.replaceAll(" ", "")}.png`}
+                    className="mr-1"
+                    src={`/traits/bronze_trait.avif`}
                     alt={trait.name}
                     height={12}
                     width={32}
                   />
-                  <span>
-                    {trait.name} {trait.count}
-                  </span>
+                  <Image
+                    src={`/traits/${trait.name.replaceAll(" ", "")}.png`}
+                    alt={trait.name}
+                    height={8}
+                    width={24}
+                    className="-ml-8 brightness-0"
+                  />
+                  <div className="flex flex-col text-xs ml-4 capitalize">
+                    <span>{trait.name}</span>
+                    <span className="text-neutral-400">{trait.count}/</span>
+                  </div>
                 </div>
               );
             })
