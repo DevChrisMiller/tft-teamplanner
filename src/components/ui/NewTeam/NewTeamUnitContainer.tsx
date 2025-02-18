@@ -13,7 +13,7 @@ export default function NewTeamUnitContainer({
   handleUpdateTeam,
   currentTeam,
 }: Props) {
-  const cost: number = units[1].cost;
+  const cost: number = units[1].Cost;
   const numUnits: number = units.length;
 
   const getBgColorClass = (cost: number): string => {
@@ -67,7 +67,7 @@ export default function NewTeamUnitContainer({
               <UnitSmallDetail
                 handleUpdateTeam={(unit) => {
                   const existingIndex = currentTeam.findIndex(
-                    (slot) => slot?.id === unit.id
+                    (slot) => slot?.ID === unit.ID
                   );
 
                   if (existingIndex !== -1) {
@@ -83,7 +83,7 @@ export default function NewTeamUnitContainer({
                 }}
                 unit={unit}
                 color={getBgColorClass(cost)}
-                key={unit.name}
+                key={unit.Name}
               />
             );
           })}

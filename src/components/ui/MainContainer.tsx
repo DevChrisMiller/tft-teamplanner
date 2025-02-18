@@ -24,7 +24,7 @@ export default function MainContainer() {
   const handleUpdateTeam = (unit: Unit, index: number) => {
     setCurrentTeam((prevTeam) => {
       const newTeam = [...prevTeam];
-      if (newTeam[index]?.id === unit.id) {
+      if (newTeam[index]?.ID === unit.ID) {
         newTeam[index] = null;
       } else {
         newTeam[index] = unit;

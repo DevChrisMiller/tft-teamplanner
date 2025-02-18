@@ -182,7 +182,7 @@ export const TraitsArray = [
   },
   {
     id: 12,
-    name: "emmissary",
+    name: "emissary",
     breakpoints: [
       {
         numUnits: 1,

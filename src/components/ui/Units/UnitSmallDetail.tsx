@@ -17,13 +17,13 @@ export default function UnitSmallDetail({
       <Image
         onClick={() => handleUpdateTeam(unit)}
         className="border-medium rounded-large border-green-100 cursor-pointer relative"
-        src={`/splash-art/${unit.imgsrc}`}
-        alt={unit.name}
+        src={`/splash-art/${unit.ImageSource1}`}
+        alt={unit.Name}
         height={64}
         width={64}
       />
       <div className="flex flex-row items-center bg-neutral-600 w-fit h-10 justify-self-center rounded-lg p-0.5 pt-5 -mt-4">
-        {unit.traits.map((trait, i) => {
+        {/* {unit.traits.map((trait, i) => {
           return (
             <Image
               className="mx-0.5"
@@ -34,9 +34,9 @@ export default function UnitSmallDetail({
               key={i}
             />
           );
-        })}
+        })} */}
       </div>
-      <p className="text-xs break-normal">{unit.name}</p>
+      <p className="text-xs break-normal">{unit.Name}</p>
     </div>
   );
 }

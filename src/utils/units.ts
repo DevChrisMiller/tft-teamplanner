@@ -12,7 +12,7 @@ export const UnitsArray: Unit[] = [
     id: 2,
     name: "Ambessa",
     cost: 4,
-    traits: ["conquerer", "emissary", "quickstriker"],
+    traits: ["conqueror", "emissary", "quickstriker"],
     imgsrc: "ambessa.avif",
   },
   {
@@ -61,14 +61,14 @@ export const UnitsArray: Unit[] = [
     id: 9,
     name: "Darius",
     cost: 1,
-    traits: ["conquerer", "watcher"],
+    traits: ["conqueror", "watcher"],
     imgsrc: "darius.avif",
   },
   {
     id: 10,
     name: "Draven",
     cost: 1,
-    traits: ["conquerer", "pit fighter"],
+    traits: ["conqueror", "pit fighter"],
     imgsrc: "draven.avif",
   },
   {
@@ -201,7 +201,7 @@ export const UnitsArray: Unit[] = [
     id: 29,
     name: "Mordekaiser",
     cost: 5,
-    traits: ["conquerer", "dominator"],
+    traits: ["conqueror", "dominator"],
     imgsrc: "mordekaiser.avif",
   },
   {
@@ -250,7 +250,7 @@ export const UnitsArray: Unit[] = [
     id: 36,
     name: "Rell",
     cost: 2,
-    traits: ["conquerer", "sentinel", "visionary"],
+    traits: ["conqueror", "sentinel", "visionary"],
     imgsrc: "rell.avif",
   },
   {
@@ -327,7 +327,7 @@ export const UnitsArray: Unit[] = [
     id: 47,
     name: "Swain",
     cost: 3,
-    traits: ["conquerer", "form swapper", "sorcerer"],
+    traits: ["conqueror", "form swapper", "sorcerer"],
     imgsrc: "swain.avif",
   },
   {

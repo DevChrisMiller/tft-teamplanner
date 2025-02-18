@@ -15,7 +15,7 @@ export default function NewTeamContainer({ currentTeam }: Props) {
               className="flex items-center justify-center w-26 h-40 rounded-md bg-neutral-800"
             >
               <span className="text-neutral-600">
-                {unit ? unit.name : i + 1}
+                {unit ? unit.Name : i + 1}
               </span>
             </div>
           );
