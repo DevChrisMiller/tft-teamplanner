@@ -4,7 +4,7 @@ import { Unit } from "@/d";
 
 export async function GET() {
   try {
-    const units = await execStoredProcedure<Unit>("GetAllUnitsWithTraits", {
+    const units = await execStoredProcedure<Unit>("GetAllUnits", {
       p_SetID: 1,
     });
     return NextResponse.json(units);

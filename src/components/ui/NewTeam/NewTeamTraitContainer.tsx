@@ -1,93 +1,97 @@
 import Image from "next/image";
-import { Unit } from "@/d";
-import { TraitsArray } from "@/utils/traits";
+import { Unit, Trait } from "@/d";
 import { useState, useEffect } from "react";
 
 interface Props {
   currentTeam: (Unit | null)[];
+  traits: Trait[];
 }
 
-const getTraitLevel = (traitName: string, count: number) => {
-  const traitData = TraitsArray.find(
-    (trait) => trait.name.toLowerCase() === traitName.toLowerCase()
-  );
+export default function NewTeamTraitContainer({ currentTeam, traits }: Props) {
+  const [currentTraits, setCurrentTraits] = useState<
+    Record<string, { count: number; trait: Trait }>
+  >({});
 
-  if (!traitData) return { level: 0, nextBreakpoint: null };
+  useEffect(() => {
+    const newTraits: Record<string, { count: number; trait: Trait }> = {};
 
-  // Sort breakpoints by numUnits in descending order to check highest achieved level first
-  const sortedBreakpoints = [...traitData.breakpoints].sort(
-    (a, b) => b.numUnits - a.numUnits
-  );
+    currentTeam.forEach((unit) => {
+      if (unit && unit.Traits) {
+        unit.Traits.forEach((trait) => {
+          const traitName = trait.Name;
+          if (!newTraits[traitName]) {
+            newTraits[traitName] = { count: 0, trait };
+          }
+          newTraits[traitName].count += 1;
+        });
+      }
+    });
+    setCurrentTraits(newTraits);
+  }, [currentTeam]);
 
-  // Find the highest achieved breakpoint
-  const achievedBreakpoint = sortedBreakpoints.find(
-    (breakpoint) => count >= breakpoint.numUnits
-  );
+  const getTraitLevel = (trait: Trait, count: number) => {
+    // Check each breakpoint level in descending order
+    if (trait.BreakPoint3Count && count >= trait.BreakPoint3Count) {
+      return {
+        level: trait.BreakPoint3Level,
+        nextBreakpoint: trait.BreakPoint3Count,
+      };
+    } else if (trait.BreakPoint2Count && count >= trait.BreakPoint2Count) {
+      return {
+        level: trait.BreakPoint2Level,
+        nextBreakpoint: trait.BreakPoint3Count || null,
+      };
+    } else if (trait.BreakPoint1Count && count >= trait.BreakPoint1Count) {
+      return {
+        level: trait.BreakPoint1Level,
+        nextBreakpoint: trait.BreakPoint2Count || null,
+      };
+    } else if (trait.BreakPoint1Count) {
+      return {
+        level: 0,
+        nextBreakpoint: trait.BreakPoint1Count,
+      };
+    }
 
-  // Find the next breakpoint
-  const nextBreakpoint = sortedBreakpoints
-    .reverse()
-    .find((breakpoint) => count <= breakpoint.numUnits);
-
-  console.log(traitData, nextBreakpoint);
-  return {
-    level: achievedBreakpoint?.level || 0,
-    nextBreakpoint: nextBreakpoint?.numUnits || null,
+    return { level: 0, nextBreakpoint: null };
   };
-};
 
-const getTraitImage = (level: number) => {
-  switch (level) {
-    case 1:
-      return "bronze_trait.avif";
-    case 2:
-      return "silver_trait.avif";
-    case 3:
-      return "gold_trait.avif";
-    case 5:
-      return "unique_trait.avif";
-    default:
-      return "empty_trait.avif";
-  }
-};
-
-export default function NewTeamTraitContainer({ currentTeam }: Props) {
-  // compare to trait breakpoints for background
-  // put trait on top
-  const [currentTraits, setCurrentTraits] = useState<Record<string, number>>(
-    {}
-  );
-
-  // useEffect(() => {
-  //   const newTraits: Record<string, number> = {};
-
-  //   currentTeam.forEach((unit) => {
-  //     if (unit && unit.traits) {
-  //       unit.traits.forEach((trait) => {
-  //         newTraits[trait] = (newTraits[trait] || 0) + 1;
-  //       });
-  //     }
-  //   });
-  //   setCurrentTraits(newTraits);
-  // }, [currentTeam]);
+  const getTraitImage = (level: number) => {
+    switch (level) {
+      case 1:
+        return "bronze_trait.avif";
+      case 2:
+        return "silver_trait.avif";
+      case 3:
+        return "gold_trait.avif";
+      case 5:
+        return "unique_trait.avif";
+      default:
+        return "empty_trait.avif";
+    }
+  };
 
   const traitArray = Object.entries(currentTraits)
-    .map(([name, count]) => {
-      const { level, nextBreakpoint } = getTraitLevel(name, count);
+    .map(([name, { count, trait }]) => {
+      const { level, nextBreakpoint } = getTraitLevel(trait, count);
       return {
         name,
         count,
         level,
         nextBreakpoint,
+        imageSource: trait.ImageSource,
       };
     })
-    .sort((a, b) => b.level - a.level);
+    .sort((a, b) => {
+      // Sort by level first, then by count
+      if (b.level !== a.level) return b.level - a.level;
+      return b.count - a.count;
+    });
 
-  console.log("traitarray", traitArray);
   return (
     <>
       <div className="flex flex-col flex-shrink-0 min-w-32 h-full overflow-y-auto no-scrollbar">
-        {currentTeam.some((u) => u !== null)
+        {currentTeam.some((u) => u !== null) && traitArray.length > 0
           ? traitArray.map((trait, i) => {
               const traitImage = getTraitImage(trait.level);
               return (
@@ -100,7 +104,7 @@ export default function NewTeamTraitContainer({ currentTeam }: Props) {
                     width={32}
                   />
                   <Image
-                    src={`/traits/${trait.name.replaceAll(" ", "")}.png`}
+                    src={`/traits/${trait.imageSource}`}
                     alt={trait.name}
                     height={8}
                     width={24}
@@ -110,9 +114,7 @@ export default function NewTeamTraitContainer({ currentTeam }: Props) {
                     <span>{trait.name}</span>
                     <span className="text-neutral-400">
                       {trait.count}
-                      {trait.nextBreakpoint
-                        ? `/${trait.nextBreakpoint}`
-                        : " (Max)"}
+                      {`/${trait.nextBreakpoint}`}
                     </span>
                   </div>
                 </div>

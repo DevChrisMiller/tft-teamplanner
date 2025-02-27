@@ -5,17 +5,76 @@ import FloatingWindowOption from "./FloatingWindowOption";
 import NewTeamContainerHeader from "./NewTeam/NewTeamContainerHeader";
 import NewTeamOptions from "./NewTeam/NewTeamOptions";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NewTeamUnitOverview from "./NewTeam/NewTeamUnitOverview";
 import NewTeamTraitContainer from "./NewTeam/NewTeamTraitContainer";
 import NewTeamContainer from "./NewTeam/NewTeamContainer";
-import { Unit } from "@/d";
+import { Unit, Trait } from "@/d";
+import { Spinner } from "@nextui-org/react";
 
 export default function MainContainer() {
   const [creatingTeam, setCreatingTeam] = useState(false);
   const [currentTeam, setCurrentTeam] = useState<(Unit | null)[]>(
     Array(10).fill(null)
   );
+  const [units, setUnits] = useState<Unit[]>([]);
+  const [traits, setTraits] = useState<Trait[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+
+        // Fetch both units and traits in parallel
+        const [unitsResponse, traitsResponse] = await Promise.all([
+          fetch("/api/getUnits"),
+          fetch("/api/getTraits"),
+        ]);
+
+        if (!unitsResponse.ok) {
+          throw new Error("Failed to fetch units");
+        }
+        if (!traitsResponse.ok) {
+          throw new Error("Failed to fetch traits");
+        }
+
+        const unitsData: Unit[] = await unitsResponse.json();
+        const traitsData: Trait[] = await traitsResponse.json();
+
+        // Create a map of traits by ID for easy lookup
+        const traitsMap: Record<number, Trait> = {};
+        traitsData.forEach((trait) => {
+          traitsMap[trait.ID] = trait;
+        });
+
+        // Enhance units with their associated traits
+        const enhancedUnits: Unit[] = unitsData.map((unit) => {
+          const unitTraits: Trait[] = [];
+
+          // Add traits based on non-null Trait IDs
+          if (unit.Trait1ID) unitTraits.push(traitsMap[unit.Trait1ID]);
+          if (unit.Trait2ID) unitTraits.push(traitsMap[unit.Trait2ID]);
+          if (unit.Trait3ID) unitTraits.push(traitsMap[unit.Trait3ID]);
+
+          return {
+            ...unit,
+            Traits: unitTraits,
+          };
+        });
+
+        setUnits(enhancedUnits);
+        setTraits(traitsData);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to fetch data");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array since we only want to fetch once
 
   const handleCreatingTeam = (creatingTeam: boolean) => {
     setCreatingTeam(creatingTeam);
@@ -37,6 +96,24 @@ export default function MainContainer() {
     setCurrentTeam(Array(10).fill(null));
   };
 
+  // if (isLoading) {
+  //   return (
+  //     <main className="bg-neutral-900 rounded-3xl w-full p-2 lg:p-6 md:p-4 sm:p-2 flex flex-col h-full">
+  //       <div className="flex items-center justify-center h-full w-full">
+  //         <Spinner size="lg" />
+  //       </div>
+  //     </main>
+  //   );
+  // }
+
+  // if (error) {
+  //   return (
+  //     <main className="bg-neutral-900 rounded-3xl w-full p-2 lg:p-6 md:p-4 sm:p-2 flex flex-col h-full">
+  //       <div className="text-red-500 p-4">Error: {error}</div>
+  //     </main>
+  //   );
+  // }
+
   return (
     <>
       <main className="bg-neutral-900 rounded-3xl w-full p-2 lg:p-6 md:p-4 sm:p-2 flex flex-col h-full">
@@ -48,8 +125,12 @@ export default function MainContainer() {
               <NewTeamUnitOverview
                 handleUpdateTeam={handleUpdateTeam}
                 currentTeam={currentTeam}
+                units={units}
               />
-              <NewTeamTraitContainer currentTeam={currentTeam} />
+              <NewTeamTraitContainer
+                currentTeam={currentTeam}
+                traits={traits}
+              />
               <NewTeamContainer currentTeam={currentTeam} />
             </div>
           </div>

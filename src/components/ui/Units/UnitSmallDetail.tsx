@@ -23,18 +23,18 @@ export default function UnitSmallDetail({
         width={64}
       />
       <div className="flex flex-row items-center bg-neutral-600 w-fit h-10 justify-self-center rounded-lg p-0.5 pt-5 -mt-4">
-        {/* {unit.traits.map((trait, i) => {
+        {unit?.Traits?.map((trait, i) => {
           return (
             <Image
               className="mx-0.5"
-              src={`/traits/${trait.replaceAll(" ", "")}.png`}
+              src={`/traits/${trait.ImageSource}`}
               alt={`${trait}`}
               height={16}
               width={16}
               key={i}
             />
           );
-        })} */}
+        })}
       </div>
       <p className="text-xs break-normal">{unit.Name}</p>
     </div>
