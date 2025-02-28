@@ -3,20 +3,29 @@ import { Unit } from "@/d";
 
 interface Props {
   unit: Unit;
-  color: string;
   handleUpdateTeam: (x: Unit) => void;
 }
 
-export default function UnitSmallDetail({
-  unit,
-  color,
-  handleUpdateTeam,
-}: Props) {
+export default function UnitSmallDetail({ unit, handleUpdateTeam }: Props) {
+  const getBorderColor = (cost: number) => {
+    const colorMap: Record<number, string> = {
+      1: "border-neutral-400",
+      2: "border-green-600",
+      3: "border-cyan-600",
+      4: "border-fuchsia-600",
+      5: "border-yellow-400",
+      6: "border-purple-700",
+    };
+    return colorMap[cost];
+  };
+
   return (
     <div className="text-center mx-1 my-2 w-16">
       <Image
         onClick={() => handleUpdateTeam(unit)}
-        className="border-medium rounded-large border-green-100 cursor-pointer relative"
+        className={`${getBorderColor(
+          unit.Cost
+        )} border-medium rounded-large cursor-pointer relative`}
         src={`/splash-art/${unit.ImageSource1}`}
         alt={unit.Name}
         height={64}

@@ -82,7 +82,6 @@ export default function NewTeamUnitContainer({
                   }
                 }}
                 unit={unit}
-                color={getBgColorClass(cost)}
                 key={unit.Name}
               />
             );

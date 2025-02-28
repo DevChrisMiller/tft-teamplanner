@@ -10,7 +10,6 @@ import NewTeamUnitOverview from "./NewTeam/NewTeamUnitOverview";
 import NewTeamTraitContainer from "./NewTeam/NewTeamTraitContainer";
 import NewTeamContainer from "./NewTeam/NewTeamContainer";
 import { Unit, Trait } from "@/d";
-import { Spinner } from "@nextui-org/react";
 
 export default function MainContainer() {
   const [creatingTeam, setCreatingTeam] = useState(false);
@@ -18,7 +17,6 @@ export default function MainContainer() {
     Array(10).fill(null)
   );
   const [units, setUnits] = useState<Unit[]>([]);
-  const [traits, setTraits] = useState<Trait[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,7 +25,6 @@ export default function MainContainer() {
       try {
         setIsLoading(true);
 
-        // Fetch both units and traits in parallel
         const [unitsResponse, traitsResponse] = await Promise.all([
           fetch("/api/getUnits"),
           fetch("/api/getTraits"),
@@ -43,17 +40,14 @@ export default function MainContainer() {
         const unitsData: Unit[] = await unitsResponse.json();
         const traitsData: Trait[] = await traitsResponse.json();
 
-        // Create a map of traits by ID for easy lookup
         const traitsMap: Record<number, Trait> = {};
         traitsData.forEach((trait) => {
           traitsMap[trait.ID] = trait;
         });
 
-        // Enhance units with their associated traits
-        const enhancedUnits: Unit[] = unitsData.map((unit) => {
+        const unitsWithTraits: Unit[] = unitsData.map((unit) => {
           const unitTraits: Trait[] = [];
 
-          // Add traits based on non-null Trait IDs
           if (unit.Trait1ID) unitTraits.push(traitsMap[unit.Trait1ID]);
           if (unit.Trait2ID) unitTraits.push(traitsMap[unit.Trait2ID]);
           if (unit.Trait3ID) unitTraits.push(traitsMap[unit.Trait3ID]);
@@ -64,8 +58,7 @@ export default function MainContainer() {
           };
         });
 
-        setUnits(enhancedUnits);
-        setTraits(traitsData);
+        setUnits(unitsWithTraits);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch data");
       } finally {
@@ -74,7 +67,7 @@ export default function MainContainer() {
     };
 
     fetchData();
-  }, []); // Empty dependency array since we only want to fetch once
+  }, []);
 
   const handleCreatingTeam = (creatingTeam: boolean) => {
     setCreatingTeam(creatingTeam);
@@ -127,10 +120,7 @@ export default function MainContainer() {
                 currentTeam={currentTeam}
                 units={units}
               />
-              <NewTeamTraitContainer
-                currentTeam={currentTeam}
-                traits={traits}
-              />
+              <NewTeamTraitContainer currentTeam={currentTeam} />
               <NewTeamContainer currentTeam={currentTeam} />
             </div>
           </div>

@@ -24,7 +24,7 @@ export default function NewTeamUnitOverview({
   return (
     <div className="overflow-y-auto min-w-12 lg:w-fit lg:flex-shrink-0 no-scrollbar h-full">
       {Object.keys(groupedByCost)
-        .sort((a, b) => Number(a) - Number(b)) // Sort by cost
+        .sort((a, b) => Number(a) - Number(b))
         .map((key: string) => {
           return (
             <NewTeamUnitContainer
