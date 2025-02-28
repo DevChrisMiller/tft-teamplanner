@@ -13,7 +13,7 @@ export default function NewTeamUnitContainer({
   handleUpdateTeam,
   currentTeam,
 }: Props) {
-  const cost: number = units[1].Cost;
+  const cost: number = units[0]?.Cost;
   const numUnits: number = units.length;
 
   const getBgColorClass = (cost: number): string => {

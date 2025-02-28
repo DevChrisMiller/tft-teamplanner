@@ -16,9 +16,12 @@ export default function MainContainer() {
   const [currentTeam, setCurrentTeam] = useState<(Unit | null)[]>(
     Array(10).fill(null)
   );
-  const [units, setUnits] = useState<Unit[]>([]);
+  const [allUnits, setAllUnits] = useState<Unit[]>([]);
+  const [filteredUnits, setFilteredUnits] = useState<Unit[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [searchPhrase, setSearchPhrase] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,7 +61,7 @@ export default function MainContainer() {
           };
         });
 
-        setUnits(unitsWithTraits);
+        setAllUnits(unitsWithTraits);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch data");
       } finally {
@@ -68,6 +71,18 @@ export default function MainContainer() {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const filteredUnits: Unit[] = allUnits.filter((unit: Unit) => {
+      return (
+        unit.Name.toLowerCase().includes(searchPhrase.toLowerCase()) ||
+        unit.Traits?.some((trait) =>
+          trait.Name.toLowerCase().includes(searchPhrase.toLowerCase())
+        )
+      );
+    });
+    setFilteredUnits(filteredUnits);
+  }, [searchPhrase]);
 
   const handleCreatingTeam = (creatingTeam: boolean) => {
     setCreatingTeam(creatingTeam);
@@ -87,6 +102,10 @@ export default function MainContainer() {
 
   const handleClearTeam = () => {
     setCurrentTeam(Array(10).fill(null));
+  };
+
+  const handleUpdateSearch = (searchPhrase: string) => {
+    setSearchPhrase(searchPhrase);
   };
 
   // if (isLoading) {
@@ -113,12 +132,15 @@ export default function MainContainer() {
         {creatingTeam ? (
           <div className="flex flex-col gap-4 h-full">
             <NewTeamContainerHeader handleCreatingTeam={handleCreatingTeam} />
-            <NewTeamOptions handleClearTeam={handleClearTeam} />
+            <NewTeamOptions
+              handleClearTeam={handleClearTeam}
+              handleUpdateSearch={handleUpdateSearch}
+            />
             <div className="flex flex-row gap-2 h-[600px]">
               <NewTeamUnitOverview
                 handleUpdateTeam={handleUpdateTeam}
                 currentTeam={currentTeam}
-                units={units}
+                units={searchPhrase ? filteredUnits : allUnits}
               />
               <NewTeamTraitContainer currentTeam={currentTeam} />
               <NewTeamContainer currentTeam={currentTeam} />

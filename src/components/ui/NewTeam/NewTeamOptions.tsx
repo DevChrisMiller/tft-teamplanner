@@ -10,9 +10,13 @@ import { useState } from "react";
 
 interface Props {
   handleClearTeam: () => void;
+  handleUpdateSearch: (searchPhrase: string) => void;
 }
 
-export default function NewTeamOptions({ handleClearTeam }: Props) {
+export default function NewTeamOptions({
+  handleClearTeam,
+  handleUpdateSearch,
+}: Props) {
   const [isTraitFilter, setIsTraitFilter] = useState(false);
 
   return (
@@ -24,8 +28,8 @@ export default function NewTeamOptions({ handleClearTeam }: Props) {
         radius="lg"
         color="default"
         className="w-96 mr-2"
-        onChange={() => {
-          console.log("searching...");
+        onChange={(e) => {
+          handleUpdateSearch(e.target.value);
         }}
         startContent={
           <FontAwesomeIcon
