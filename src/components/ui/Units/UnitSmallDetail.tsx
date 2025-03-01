@@ -3,10 +3,15 @@ import { Unit } from "@/d";
 
 interface Props {
   unit: Unit;
+  cost: number;
   handleUpdateTeam: (x: Unit) => void;
 }
 
-export default function UnitSmallDetail({ unit, handleUpdateTeam }: Props) {
+export default function UnitSmallDetail({
+  unit,
+  cost,
+  handleUpdateTeam,
+}: Props) {
   const getBorderColor = (cost: number) => {
     const colorMap: Record<number, string> = {
       1: "border-neutral-400",
@@ -16,6 +21,19 @@ export default function UnitSmallDetail({ unit, handleUpdateTeam }: Props) {
       5: "border-yellow-400",
       6: "border-purple-700",
     };
+    return colorMap[cost];
+  };
+
+  const getBgColor = (cost: number) => {
+    const colorMap: Record<number, string> = {
+      1: "bg-neutral-500",
+      2: "bg-green-700",
+      3: "bg-cyan-700",
+      4: "bg-fuchsia-700",
+      5: "bg-yellow-500",
+      6: "bg-purple-800",
+    };
+
     return colorMap[cost];
   };
 
@@ -31,7 +49,11 @@ export default function UnitSmallDetail({ unit, handleUpdateTeam }: Props) {
         height={64}
         width={64}
       />
-      <div className="flex flex-row items-center bg-neutral-600 w-fit h-10 justify-self-center rounded-lg p-0.5 pt-5 -mt-4">
+      <div
+        className={`flex flex-row items-center ${getBgColor(
+          cost
+        )} rounded-lg justify-self-center bg-opacity-50 w-fit h-10 p-0.5 pt-5 -mt-4`}
+      >
         {unit?.Traits?.map((trait, i) => {
           return (
             <Image

@@ -99,13 +99,13 @@ export default function NewTeamTraitContainer({ currentTeam }: Props) {
                     className="mr-1"
                     src={`/traits/${trait.bgImage}`}
                     alt={trait.name}
-                    height={12}
+                    height={32}
                     width={32}
                   />
                   <Image
                     src={`/traits/${trait.imageSource}`}
                     alt={trait.name}
-                    height={8}
+                    height={24}
                     width={24}
                     className={`-ml-8 ${trait.level > 0 ? "brightness-0" : ""}`}
                   />
@@ -125,7 +125,7 @@ export default function NewTeamTraitContainer({ currentTeam }: Props) {
                     className="mr-1"
                     src="/traits/empty_trait.avif"
                     alt="empty trait"
-                    height={12}
+                    height={32}
                     width={32}
                   />
                   <div className="flex flex-col gap-1">

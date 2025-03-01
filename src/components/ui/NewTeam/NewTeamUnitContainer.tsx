@@ -33,7 +33,7 @@ export default function NewTeamUnitContainer({
       <div
         className={`${getBgColorClass(
           cost
-        )} min-w-32 max-w-96 rounded-xl h-fit bg-opacity-40 flex flex-col p-2 mb-3 mr-2`}
+        )} min-w-32 max-w-96 rounded-xl h-fit bg-opacity-40 flex flex-col p-0.5 mb-3 mr-2`}
       >
         <div className="flex flex-row m-2 justify-between items-center">
           <div className="flex flex-row items-center">
@@ -81,6 +81,7 @@ export default function NewTeamUnitContainer({
                     }
                   }
                 }}
+                cost={cost}
                 unit={unit}
                 key={unit.Name}
               />
