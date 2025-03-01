@@ -16,7 +16,7 @@ export default function NewTeamUnitContainer({
   const cost: number = units[0]?.Cost;
   const numUnits: number = units.length;
 
-  const getBgColorClass = (cost: number): string => {
+  const getBgColor = (cost: number): string => {
     const colorMap: Record<number, string> = {
       1: "bg-neutral-600",
       2: "bg-green-800",
@@ -31,7 +31,7 @@ export default function NewTeamUnitContainer({
   return (
     <>
       <div
-        className={`${getBgColorClass(
+        className={`${getBgColor(
           cost
         )} min-w-32 max-w-96 rounded-xl h-fit bg-opacity-40 flex flex-col p-0.5 mb-3 mr-2`}
       >
@@ -51,7 +51,9 @@ export default function NewTeamUnitContainer({
               {numUnits} units
             </span>
             <Button
-              className="bg-neutral-600 rounded-2xl text-white h-6 hidden md:block"
+              className={`${getBgColor(
+                cost
+              )} bg-opacity-75 rounded-2xl text-white h-6 hidden md:block`}
               size="sm"
               onClick={() => {
                 console.log("adding all units...");

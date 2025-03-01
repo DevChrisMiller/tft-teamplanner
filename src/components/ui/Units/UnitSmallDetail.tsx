@@ -21,7 +21,7 @@ export default function UnitSmallDetail({
       5: "border-yellow-400",
       6: "border-purple-700",
     };
-    return colorMap[cost];
+    return colorMap[cost] || "border-neutral-400";
   };
 
   const getBgColor = (cost: number) => {
@@ -34,7 +34,7 @@ export default function UnitSmallDetail({
       6: "bg-purple-800",
     };
 
-    return colorMap[cost];
+    return colorMap[cost] || "bg-neutral-500";
   };
 
   return (
