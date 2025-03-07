@@ -143,7 +143,10 @@ export default function MainContainer() {
                 units={searchPhrase ? filteredUnits : allUnits}
               />
               <NewTeamTraitContainer currentTeam={currentTeam} />
-              <NewTeamContainer currentTeam={currentTeam} />
+              <NewTeamContainer
+                currentTeam={currentTeam}
+                handleUpdateTeam={handleUpdateTeam}
+              />
             </div>
           </div>
         ) : (

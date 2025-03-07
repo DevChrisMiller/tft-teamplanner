@@ -2,6 +2,7 @@ import { Unit } from "@/d";
 import UnitSmallDetail from "../Units/UnitSmallDetail";
 import Image from "next/image";
 import { Button } from "@nextui-org/react";
+import { getBgColor } from "@/utils/getBgColor";
 
 interface Props {
   units: Unit[];
@@ -15,18 +16,6 @@ export default function NewTeamUnitContainer({
 }: Props) {
   const cost: number = units[0]?.Cost;
   const numUnits: number = units.length;
-
-  const getBgColor = (cost: number): string => {
-    const colorMap: Record<number, string> = {
-      1: "bg-neutral-600",
-      2: "bg-green-800",
-      3: "bg-cyan-800",
-      4: "bg-fuchsia-800",
-      5: "bg-yellow-600",
-      6: "bg-purple-900",
-    };
-    return colorMap[cost] || "bg-white";
-  };
 
   return (
     <>
