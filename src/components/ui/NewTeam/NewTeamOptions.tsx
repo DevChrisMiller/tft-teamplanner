@@ -6,19 +6,20 @@ import { faLayerGroup } from "@fortawesome/free-solid-svg-icons";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { Switch } from "@nextui-org/react";
-import { useState } from "react";
 
 interface Props {
   handleClearTeam: () => void;
   handleUpdateSearch: (searchPhrase: string) => void;
+  handleUpdateSort: (filterType: boolean) => void;
+  sortByTrait: boolean;
 }
 
 export default function NewTeamOptions({
   handleClearTeam,
   handleUpdateSearch,
+  handleUpdateSort,
+  sortByTrait,
 }: Props) {
-  const [isTraitFilter, setIsTraitFilter] = useState(false);
-
   return (
     <div className="flex gap-4">
       <Input
@@ -41,8 +42,8 @@ export default function NewTeamOptions({
       <Switch
         color="default"
         size="lg"
-        isSelected={isTraitFilter}
-        onValueChange={setIsTraitFilter}
+        isSelected={sortByTrait}
+        onValueChange={() => handleUpdateSort(sortByTrait)}
         thumbIcon={({ isSelected }) =>
           isSelected ? (
             <FontAwesomeIcon icon={faLayerGroup} className="text-blue-500" />

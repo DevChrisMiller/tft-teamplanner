@@ -23,6 +23,8 @@ export default function MainContainer() {
 
   const [searchPhrase, setSearchPhrase] = useState("");
 
+  const [sortByTrait, setSortByTrait] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -108,6 +110,10 @@ export default function MainContainer() {
     setSearchPhrase(searchPhrase);
   };
 
+  const handleUpdateSort = (filterType: boolean) => {
+    setSortByTrait(!filterType);
+  };
+
   // if (isLoading) {
   //   return (
   //     <main className="bg-neutral-900 rounded-3xl w-full p-2 lg:p-6 md:p-4 sm:p-2 flex flex-col h-full">
@@ -135,12 +141,15 @@ export default function MainContainer() {
             <NewTeamOptions
               handleClearTeam={handleClearTeam}
               handleUpdateSearch={handleUpdateSearch}
+              handleUpdateSort={handleUpdateSort}
+              sortByTrait={sortByTrait}
             />
             <div className="flex flex-row gap-2 h-[600px]">
               <NewTeamUnitOverview
                 handleUpdateTeam={handleUpdateTeam}
                 currentTeam={currentTeam}
                 units={searchPhrase ? filteredUnits : allUnits}
+                sortByTrait={sortByTrait}
               />
               <NewTeamTraitContainer currentTeam={currentTeam} />
               <NewTeamContainer

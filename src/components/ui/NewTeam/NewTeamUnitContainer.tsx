@@ -8,14 +8,17 @@ interface Props {
   units: Unit[];
   handleUpdateTeam: (unit: Unit, index: number) => void;
   currentTeam: (Unit | null)[];
+  sortByTrait: boolean;
 }
 export default function NewTeamUnitContainer({
   units,
   handleUpdateTeam,
   currentTeam,
+  sortByTrait,
 }: Props) {
-  const cost: number = units[0]?.Cost;
+  const cost: number = units[0]?.Cost || 1;
   const numUnits: number = units.length;
+  console.log("units", units);
 
   return (
     <>
@@ -29,7 +32,7 @@ export default function NewTeamUnitContainer({
             <Image
               className="mr-2"
               src="/general/gold-icon.webp"
-              alt="gold icon"
+              alt="grouping icon"
               height={12}
               width={20}
             />
