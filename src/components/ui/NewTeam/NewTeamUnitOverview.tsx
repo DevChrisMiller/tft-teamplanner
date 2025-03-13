@@ -15,6 +15,7 @@ export default function NewTeamUnitOverview({
   units,
   sortByTrait,
 }: Props) {
+  // Group units by cost
   const groupedByCost = units.reduce<Record<number, Unit[]>>((result, unit) => {
     const key = unit.Cost;
     if (!result[key]) {
@@ -24,6 +25,7 @@ export default function NewTeamUnitOverview({
     return result;
   }, {});
 
+  // Group units by trait
   const groupedByTrait = units.reduce<Record<string, Unit[]>>(
     (result, unit) => {
       if (unit.Traits && unit.Traits.length > 0) {
@@ -40,9 +42,12 @@ export default function NewTeamUnitOverview({
     {}
   );
 
-  console.log("groupedByCost", groupedByCost);
-  console.log("groupedByTrait", groupedByTrait);
+  // Sort by cost within trait
+  Object.keys(groupedByTrait).forEach((key) =>
+    groupedByTrait[key].sort((a, b) => a.Cost - b.Cost)
+  );
 
+  // Determine which grouping is active
   const activeGrouping = sortByTrait ? groupedByTrait : groupedByCost;
 
   return (
@@ -54,6 +59,7 @@ export default function NewTeamUnitOverview({
               units={activeGrouping[key]}
               handleUpdateTeam={handleUpdateTeam}
               currentTeam={currentTeam}
+              groupKey={key}
               key={key}
               sortByTrait={sortByTrait}
             />
