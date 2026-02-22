@@ -51,6 +51,12 @@ export default function Navbar() {
           </>
         ) : (
           <>
+            <Link
+              href="/comps"
+              className="text-sm text-neutral-300 hover:text-white transition-colors"
+            >
+              Community
+            </Link>
             <TwitterLink />
             <Button
               size="sm"
