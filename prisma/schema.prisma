@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// =====================
+// NextAuth.js required models
+// =====================
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+  teams    Team[]
+  upvotes  Upvote[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// =====================
+// App models
+// =====================
+
+model Team {
+  id          String   @id @default(cuid())
+  name        String
+  userId      String   @map("user_id")
+  isPublic    Boolean  @default(false)
+  slug        String?  @unique
+  setId       String   @default("TFT13")
+  description String?
+  upvoteCount Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user    User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  units   TeamUnit[]
+  upvotes Upvote[]
+
+  @@index([userId])
+  @@index([isPublic, upvoteCount])
+  @@map("teams")
+}
+
+model TeamUnit {
+  id        String @id @default(cuid())
+  teamId    String @map("team_id")
+  unitId    String @map("unit_id")  // CDragon apiName e.g. "TFT13_Annie"
+  slotIndex Int    @map("slot_index") // 0-9
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, slotIndex])
+  @@index([teamId])
+  @@map("team_units")
+}
+
+model Upvote {
+  userId String @map("user_id")
+  teamId String @map("team_id")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@id([userId, teamId])
+  @@map("upvotes")
+}

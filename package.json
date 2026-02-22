@@ -9,21 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.11.1",
     "@fortawesome/fontawesome-svg-core": "^6.7.1",
     "@fortawesome/free-brands-svg-icons": "^6.7.1",
     "@fortawesome/free-regular-svg-icons": "^6.7.1",
     "@fortawesome/free-solid-svg-icons": "^6.7.1",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@nextui-org/react": "^2.4.8",
+    "@prisma/client": "^6.19.2",
     "@tanstack/react-query": "^5.66.5",
     "framer-motion": "^11.18.2",
-    "mssql": "^11.0.1",
     "next": "^15.1.7",
+    "next-auth": "^5.0.0-beta.30",
+    "prisma": "^6.19.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@types/mssql": "^9.1.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
