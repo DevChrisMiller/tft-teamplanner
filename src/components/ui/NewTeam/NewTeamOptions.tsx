@@ -6,12 +6,16 @@ import { faLayerGroup } from "@fortawesome/free-solid-svg-icons";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { Switch } from "@nextui-org/react";
+import { Unit } from "@/d";
+import { encodeTeamCode } from "@/lib/teamCode";
+import { DEFAULT_SET_KEY } from "@/lib/setConfig";
 
 interface Props {
   handleClearTeam: () => void;
   handleUpdateSearch: (searchPhrase: string) => void;
   handleUpdateSort: (filterType: boolean) => void;
   sortByTrait: boolean;
+  currentTeam: (Unit | null)[];
 }
 
 export default function NewTeamOptions({
@@ -19,7 +23,14 @@ export default function NewTeamOptions({
   handleUpdateSearch,
   handleUpdateSort,
   sortByTrait,
+  currentTeam,
 }: Props) {
+  const handleCopyCode = () => {
+    const code = encodeTeamCode(currentTeam, DEFAULT_SET_KEY);
+    if (!code) return;
+    navigator.clipboard.writeText(code).catch(console.error);
+  };
+
   return (
     <div className="flex gap-4">
       <Input
@@ -59,11 +70,10 @@ export default function NewTeamOptions({
       />
       <Button
         className="bg-neutral-800 h-8 rounded-2xl text-white"
-        onClick={() => {
-          console.log("copying team code...");
-        }}
+        onClick={handleCopyCode}
+        isDisabled={!currentTeam.some((u) => u !== null)}
       >
-        <FontAwesomeIcon icon={faCopy} className="h-3 w-3" /> Copy Team Code
+        <FontAwesomeIcon icon={faCopy} className="h-3 w-3" /> Copy Code
       </Button>
 
       <Button
