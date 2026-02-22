@@ -1,11 +1,11 @@
 export interface CDragonChampion {
   apiName: string;
-  characterName?: string;
   cost: number;
-  icon: string;
+  icon: string;         // centered splash art (large)
+  squareIcon?: string;  // square splash crop (medium)
+  tileIcon?: string;    // HUD square portrait — best for unit cards
   name: string;
-  traits: string[];          // trait names e.g. ["Rebel", "Invoker"]
-  squareSplashPath?: string; // higher-res portrait, may be empty string
+  traits: string[];     // trait names e.g. ["Rebel", "Invoker"]
   ability?: unknown;
 }
 

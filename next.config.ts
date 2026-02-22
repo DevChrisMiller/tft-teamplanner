@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "raw.communitydragon.org",
       },
+      {
+        // Discord user avatars
+        protocol: "https",
+        hostname: "cdn.discordapp.com",
+      },
     ],
   },
 };

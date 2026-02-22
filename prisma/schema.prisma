@@ -79,7 +79,7 @@ model Team {
   userId      String   @map("user_id")
   isPublic    Boolean  @default(false)
   slug        String?  @unique
-  setId       String   @default("TFT13")
+  setId       String   @default("TFT16")
   description String?
   upvoteCount Int      @default(0)
   createdAt   DateTime @default(now())

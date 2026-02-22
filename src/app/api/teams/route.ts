@@ -41,7 +41,7 @@ export async function POST(request: Request) {
     data: {
       name: body.name.trim(),
       userId: session.user.id,
-      setId: body.setId ?? "TFT13",
+      setId: body.setId ?? "TFT16",
       units: {
         create: body.units.map((u) => ({
           unitId: u.unitId,

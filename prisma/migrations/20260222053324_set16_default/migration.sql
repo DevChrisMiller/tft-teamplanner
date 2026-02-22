@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "teams" ALTER COLUMN "setId" SET DEFAULT 'TFT16';

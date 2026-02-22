@@ -6,12 +6,18 @@ import { authConfig } from "./auth.config";
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   adapter: PrismaAdapter(prisma),
-  session: { strategy: "database" },
+  // JWT strategy lets the edge middleware verify sessions without a DB call.
+  // PrismaAdapter still persists user + account records on first login.
+  session: { strategy: "jwt" },
   callbacks: {
     ...authConfig.callbacks,
-    session({ session, user }) {
-      // Attach the database userId to the session so server components can use it
-      if (user) session.user.id = user.id;
+    jwt({ token, user }) {
+      // On first sign-in, `user` is present — persist the DB id into the JWT.
+      if (user?.id) token.id = user.id;
+      return token;
+    },
+    session({ session, token }) {
+      if (token.id) session.user.id = token.id as string;
       return session;
     },
   },
