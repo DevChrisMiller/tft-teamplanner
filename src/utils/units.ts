@@ -1,6 +1,7 @@
-import { Unit } from "@/d";
-
-export const UnitsArray: Unit[] = [
+// Legacy Set 13 static fallback data — not used in the live app (CDragon is the data source).
+// Kept for reference. Does not conform to the current Unit interface.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const UnitsArray: any[] = [
   {
     id: 1,
     name: "Akali",

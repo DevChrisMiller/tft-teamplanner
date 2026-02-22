@@ -19,7 +19,7 @@ export default function UnitSmallDetail({
     <div className="text-center mx-1 my-2 w-16">
       <div
         className={`w-16 h-16 overflow-hidden ${getBorderColor(
-          unit.Cost
+          unit.cost
         )} border-medium rounded-large relative`}
       >
         <motion.div
@@ -32,8 +32,8 @@ export default function UnitSmallDetail({
           <Image
             onClick={() => handleUpdateTeam(unit)}
             className="cursor-pointer object-cover"
-            src={`/splash-art/${unit.ImageSource1}`}
-            alt={unit.Name}
+            src={unit.imageUrl}
+            alt={unit.name}
             fill
             sizes="64px"
           />
@@ -44,12 +44,12 @@ export default function UnitSmallDetail({
           cost
         )} rounded-lg justify-self-center bg-opacity-80 w-fit h-10 p-0.5 pt-5 -mt-4`}
       >
-        {unit?.Traits?.map((trait, i) => {
+        {unit.traits.map((trait, i) => {
           return (
             <Image
               className="mx-0.5"
-              src={`/traits/${trait.ImageSource}`}
-              alt={`${trait}`}
+              src={trait.imageUrl}
+              alt={trait.name}
               height={16}
               width={16}
               key={i}
@@ -57,7 +57,7 @@ export default function UnitSmallDetail({
           );
         })}
       </div>
-      <p className="text-xs break-normal">{unit.Name}</p>
+      <p className="text-xs break-normal">{unit.name}</p>
     </div>
   );
 }

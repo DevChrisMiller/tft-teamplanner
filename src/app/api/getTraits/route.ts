@@ -1,15 +1,14 @@
 import { NextResponse } from "next/server";
-import { execStoredProcedure } from "../../lib/db";
-import { Unit } from "@/d";
+import { fetchTraits } from "@/lib/datadragon";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const units = await execStoredProcedure<Unit>("GetAllTraits", {
-      p_SetID: 1,
-    });
-    return NextResponse.json(units);
+    const { searchParams } = new URL(request.url);
+    const setKey = searchParams.get("set") ?? undefined;
+    const traits = await fetchTraits(setKey);
+    return NextResponse.json(traits);
   } catch (error) {
-    console.error("Database error:", error);
+    console.error("CDragon fetch error:", error);
     return NextResponse.json(
       { error: "Failed to fetch traits" },
       { status: 500 }

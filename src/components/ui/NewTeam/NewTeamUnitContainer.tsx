@@ -11,6 +11,7 @@ interface Props {
   sortByTrait: boolean;
   groupKey: number | string;
 }
+
 export default function NewTeamUnitContainer({
   units,
   handleUpdateTeam,
@@ -18,12 +19,32 @@ export default function NewTeamUnitContainer({
   sortByTrait,
   groupKey,
 }: Props) {
-  const cost: number = units[0]?.Cost || 1;
+  const cost: number = units[0]?.cost || 1;
   const numUnits: number = units.length;
-  const groupingIconImg = sortByTrait
-    ? "/traits/" +
-      units[0].Traits?.find((trait) => trait.Name == groupKey)?.ImageSource
-    : "/general/gold-icon.webp";
+
+  // When grouped by trait, show that trait's icon; otherwise show the gold coin icon.
+  const traitIconUrl = sortByTrait
+    ? units[0].traits.find((trait) => trait.name === groupKey)?.imageUrl
+    : null;
+  const groupingIconImg = traitIconUrl ?? "/general/gold-icon.webp";
+
+  const handleAddAll = () => {
+    // Collect all currently empty slot indices first, then fill them in order.
+    const emptySlots = currentTeam
+      .map((slot, i) => (slot === null ? i : -1))
+      .filter((i) => i !== -1);
+
+    // Skip units already in the team to avoid duplicates.
+    const unitsToAdd = units.filter(
+      (unit) => !currentTeam.some((slot) => slot?.id === unit.id)
+    );
+
+    unitsToAdd.forEach((unit, i) => {
+      if (i < emptySlots.length) {
+        handleUpdateTeam(unit, emptySlots[i]);
+      }
+    });
+  };
 
   return (
     <>
@@ -36,10 +57,11 @@ export default function NewTeamUnitContainer({
           <div className="flex flex-row items-center">
             <Image
               className="mr-2"
-              src={`${groupingIconImg}`}
+              src={groupingIconImg}
               alt="grouping icon"
               height={12}
               width={20}
+              unoptimized={groupingIconImg.startsWith("https")}
             />
             <span>{groupKey}</span>
           </div>
@@ -52,15 +74,7 @@ export default function NewTeamUnitContainer({
                 sortByTrait ? "bg-neutral-600" : getBgColor(cost)
               } bg-opacity-75 rounded-2xl text-white h-6 hidden md:block`}
               size="sm"
-              onClick={() => {
-                console.log("adding all units...");
-                units.forEach((unit, i) => {
-                  const firstEmptyIndex = currentTeam.findIndex(
-                    (slot) => slot === null
-                  );
-                  handleUpdateTeam(unit, firstEmptyIndex + i);
-                });
-              }}
+              onClick={handleAddAll}
             >
               Add All
             </Button>
@@ -72,10 +86,11 @@ export default function NewTeamUnitContainer({
               <UnitSmallDetail
                 handleUpdateTeam={(unit) => {
                   const existingIndex = currentTeam.findIndex(
-                    (slot) => slot?.ID === unit.ID
+                    (slot) => slot?.id === unit.id
                   );
 
                   if (existingIndex !== -1) {
+                    // Unit is already in team — clicking it removes it
                     handleUpdateTeam(unit, existingIndex);
                   } else {
                     const firstEmptyIndex = currentTeam.findIndex(
@@ -88,7 +103,7 @@ export default function NewTeamUnitContainer({
                 }}
                 cost={cost}
                 unit={unit}
-                key={unit.Name}
+                key={unit.name}
               />
             );
           })}

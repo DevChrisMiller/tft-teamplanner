@@ -14,7 +14,7 @@ export default function UnitLarge({ unit, handleUpdateTeam, index }: Props) {
   return (
     <div
       className={`text-center text-white w-full h-full flex flex-col border-medium rounded-md ${getBorderColor(
-        unit.Cost
+        unit.cost
       )} cursor-pointer`}
     >
       <div className="relative w-full h-full overflow-hidden rounded-md">
@@ -28,8 +28,8 @@ export default function UnitLarge({ unit, handleUpdateTeam, index }: Props) {
         >
           <Image
             className="object-cover"
-            src={`/splash-art/${unit.ImageSource1}`}
-            alt={unit.Name}
+            src={unit.imageUrl}
+            alt={unit.name}
             fill
             sizes="(max-width: 768px) 100vw, 200px"
           />
@@ -37,22 +37,22 @@ export default function UnitLarge({ unit, handleUpdateTeam, index }: Props) {
 
         <div className="absolute top-0 left-0 w-full bg-gradient-to-b from-black/70 to-transparent pt-2 pb-4 px-1">
           <p className="text-sm font-medium text-white drop-shadow-md">
-            {unit.Name}
+            {unit.name}
           </p>
         </div>
 
         <div
           className={`absolute bottom-0 left-0 w-full ${getBgColor(
-            unit.Cost
+            unit.cost
           )} bg-opacity-80 py-1`}
         >
           <div className="flex flex-row w-full justify-center gap-1">
-            {unit.Traits?.map((trait: Trait, i) => {
+            {unit.traits.map((trait: Trait, i) => {
               return (
                 <Image
                   className="mx-0.5"
-                  src={`/traits/${trait.ImageSource}`}
-                  alt={`${trait}`}
+                  src={trait.imageUrl}
+                  alt={trait.name}
                   height={16}
                   width={16}
                   key={i}

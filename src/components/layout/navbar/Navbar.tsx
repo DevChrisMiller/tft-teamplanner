@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  Chip,
-} from "@nextui-org/react";
+import { Chip } from "@nextui-org/react";
 import TFTPlannerLogo from "./TFTPlannerLogo";
 import TwitterLink from "./TwitterLink";
 

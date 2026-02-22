@@ -15,9 +15,9 @@ export default function NewTeamTraitContainer({ currentTeam }: Props) {
     const newTraits: Record<string, { count: number; trait: Trait }> = {};
 
     currentTeam.forEach((unit) => {
-      if (unit && unit.Traits) {
-        unit.Traits.forEach((trait) => {
-          const traitName = trait.Name;
+      if (unit && unit.traits) {
+        unit.traits.forEach((trait) => {
+          const traitName = trait.name;
           if (!newTraits[traitName]) {
             newTraits[traitName] = { count: 0, trait };
           }
@@ -29,46 +29,29 @@ export default function NewTeamTraitContainer({ currentTeam }: Props) {
   }, [currentTeam]);
 
   const getTraitLevel = (trait: Trait, count: number) => {
-    // Find the maximum breakpoint for this trait
     const maxBreakpoint =
-      trait.BreakPoint4Count ||
-      trait.BreakPoint3Count ||
-      trait.BreakPoint2Count ||
-      trait.BreakPoint1Count ||
-      0;
+      trait.breakpoints.length > 0
+        ? trait.breakpoints[trait.breakpoints.length - 1].count
+        : 0;
 
-    // Check each breakpoint level in descending order
-    if (trait.BreakPoint4Count && count >= trait.BreakPoint4Count) {
+    // Walk breakpoints in descending order to find the highest active tier
+    const activeBreakpoint = [...trait.breakpoints]
+      .reverse()
+      .find((bp) => count >= bp.count);
+
+    if (activeBreakpoint) {
       return {
-        level: trait.BreakPoint4Level,
+        level: activeBreakpoint.level,
         nextBreakpoint: maxBreakpoint,
-        bgImage: trait.BreakPoint4LevelBG,
-      };
-    } else if (trait.BreakPoint3Count && count >= trait.BreakPoint3Count) {
-      return {
-        level: trait.BreakPoint3Level,
-        nextBreakpoint: maxBreakpoint,
-        bgImage: trait.BreakPoint3LevelBG,
-      };
-    } else if (trait.BreakPoint2Count && count >= trait.BreakPoint2Count) {
-      return {
-        level: trait.BreakPoint2Level,
-        nextBreakpoint: maxBreakpoint,
-        bgImage: trait.BreakPoint2LevelBG,
-      };
-    } else if (trait.BreakPoint1Count && count >= trait.BreakPoint1Count) {
-      return {
-        level: trait.BreakPoint1Level,
-        nextBreakpoint: maxBreakpoint,
-        bgImage: trait.BreakPoint1LevelBG,
-      };
-    } else {
-      return {
-        level: 0,
-        nextBreakpoint: maxBreakpoint,
-        bgImage: trait.DefaultBG,
+        bgImage: activeBreakpoint.bgImage,
       };
     }
+
+    return {
+      level: 0,
+      nextBreakpoint: maxBreakpoint,
+      bgImage: trait.defaultBg,
+    };
   };
 
   const traitArray = Object.entries(currentTraits)
@@ -79,7 +62,7 @@ export default function NewTeamTraitContainer({ currentTeam }: Props) {
         count,
         level,
         nextBreakpoint,
-        imageSource: trait.ImageSource,
+        imageUrl: trait.imageUrl,
         bgImage,
       };
     })
@@ -103,7 +86,7 @@ export default function NewTeamTraitContainer({ currentTeam }: Props) {
                     width={32}
                   />
                   <Image
-                    src={`/traits/${trait.imageSource}`}
+                    src={trait.imageUrl}
                     alt={trait.name}
                     height={24}
                     width={24}

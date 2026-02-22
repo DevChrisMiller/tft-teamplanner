@@ -35,6 +35,7 @@ export async function getConnection(): Promise<mssql.ConnectionPool> {
     pool = await new mssql.ConnectionPool(sqlConfig).connect();
 
     // Handle pool errors
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     pool.on("error", (err: any) => {
       console.error("SQL Pool Error:", err);
       pool = null;
@@ -50,6 +51,7 @@ export async function getConnection(): Promise<mssql.ConnectionPool> {
 // Utility function for executing stored procedures
 export async function execStoredProcedure<T>(
   procName: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   params?: { [key: string]: any }
 ): Promise<T[]> {
   const pool = await getConnection();

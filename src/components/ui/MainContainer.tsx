@@ -9,7 +9,8 @@ import { useState, useEffect } from "react";
 import NewTeamUnitOverview from "./NewTeam/NewTeamUnitOverview";
 import NewTeamTraitContainer from "./NewTeam/NewTeamTraitContainer";
 import NewTeamContainer from "./NewTeam/NewTeamContainer";
-import { Unit, Trait } from "@/d";
+import { Spinner } from "@nextui-org/react";
+import { Unit } from "@/d";
 
 export default function MainContainer() {
   const [creatingTeam, setCreatingTeam] = useState(false);
@@ -20,50 +21,18 @@ export default function MainContainer() {
   const [filteredUnits, setFilteredUnits] = useState<Unit[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const [searchPhrase, setSearchPhrase] = useState("");
-
   const [sortByTrait, setSortByTrait] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-
-        const [unitsResponse, traitsResponse] = await Promise.all([
-          fetch("/api/getUnits"),
-          fetch("/api/getTraits"),
-        ]);
-
-        if (!unitsResponse.ok) {
-          throw new Error("Failed to fetch units");
-        }
-        if (!traitsResponse.ok) {
-          throw new Error("Failed to fetch traits");
-        }
-
-        const unitsData: Unit[] = await unitsResponse.json();
-        const traitsData: Trait[] = await traitsResponse.json();
-
-        const traitsMap: Record<number, Trait> = {};
-        traitsData.forEach((trait) => {
-          traitsMap[trait.ID] = trait;
-        });
-
-        const unitsWithTraits: Unit[] = unitsData.map((unit) => {
-          const unitTraits: Trait[] = [];
-
-          if (unit.Trait1ID) unitTraits.push(traitsMap[unit.Trait1ID]);
-          if (unit.Trait2ID) unitTraits.push(traitsMap[unit.Trait2ID]);
-          if (unit.Trait3ID) unitTraits.push(traitsMap[unit.Trait3ID]);
-
-          return {
-            ...unit,
-            Traits: unitTraits,
-          };
-        });
-
-        setAllUnits(unitsWithTraits);
+        const res = await fetch("/api/getUnits");
+        if (!res.ok) throw new Error("Failed to fetch units");
+        // Traits are already embedded in each Unit object from CDragon
+        const units: Unit[] = await res.json();
+        setAllUnits(units);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch data");
       } finally {
@@ -75,25 +44,25 @@ export default function MainContainer() {
   }, []);
 
   useEffect(() => {
-    const filteredUnits: Unit[] = allUnits.filter((unit: Unit) => {
+    const filtered = allUnits.filter((unit: Unit) => {
       return (
-        unit.Name.toLowerCase().includes(searchPhrase.toLowerCase()) ||
-        unit.Traits?.some((trait) =>
-          trait.Name.toLowerCase().includes(searchPhrase.toLowerCase())
+        unit.name.toLowerCase().includes(searchPhrase.toLowerCase()) ||
+        unit.traits.some((trait) =>
+          trait.name.toLowerCase().includes(searchPhrase.toLowerCase())
         )
       );
     });
-    setFilteredUnits(filteredUnits);
-  }, [searchPhrase]);
+    setFilteredUnits(filtered);
+  }, [searchPhrase, allUnits]);
 
-  const handleCreatingTeam = (creatingTeam: boolean) => {
-    setCreatingTeam(creatingTeam);
+  const handleCreatingTeam = (creating: boolean) => {
+    setCreatingTeam(creating);
   };
 
   const handleUpdateTeam = (unit: Unit, index: number) => {
     setCurrentTeam((prevTeam) => {
       const newTeam = [...prevTeam];
-      if (newTeam[index]?.ID === unit.ID) {
+      if (newTeam[index]?.id === unit.id) {
         newTeam[index] = null;
       } else {
         newTeam[index] = unit;
@@ -106,31 +75,34 @@ export default function MainContainer() {
     setCurrentTeam(Array(10).fill(null));
   };
 
-  const handleUpdateSearch = (searchPhrase: string) => {
-    setSearchPhrase(searchPhrase);
+  const handleUpdateSearch = (phrase: string) => {
+    setSearchPhrase(phrase);
   };
 
   const handleUpdateSort = (filterType: boolean) => {
     setSortByTrait(!filterType);
   };
 
-  // if (isLoading) {
-  //   return (
-  //     <main className="bg-neutral-900 rounded-3xl w-full p-2 lg:p-6 md:p-4 sm:p-2 flex flex-col h-full">
-  //       <div className="flex items-center justify-center h-full w-full">
-  //         <Spinner size="lg" />
-  //       </div>
-  //     </main>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <main className="bg-neutral-900 rounded-3xl w-full p-2 lg:p-6 md:p-4 sm:p-2 flex flex-col h-full">
+        <div className="flex items-center justify-center h-full w-full">
+          <Spinner size="lg" />
+        </div>
+      </main>
+    );
+  }
 
-  // if (error) {
-  //   return (
-  //     <main className="bg-neutral-900 rounded-3xl w-full p-2 lg:p-6 md:p-4 sm:p-2 flex flex-col h-full">
-  //       <div className="text-red-500 p-4">Error: {error}</div>
-  //     </main>
-  //   );
-  // }
+  if (error) {
+    return (
+      <main className="bg-neutral-900 rounded-3xl w-full p-2 lg:p-6 md:p-4 sm:p-2 flex flex-col h-full">
+        <div className="flex flex-col items-center justify-center h-full gap-2">
+          <p className="text-red-400 font-medium">Failed to load game data</p>
+          <p className="text-neutral-500 text-sm">{error}</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <>

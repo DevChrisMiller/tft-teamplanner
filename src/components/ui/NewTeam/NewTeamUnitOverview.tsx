@@ -15,9 +15,9 @@ export default function NewTeamUnitOverview({
   units,
   sortByTrait,
 }: Props) {
-  // Group units by cost
-  const groupedByCost = units.reduce<Record<number, Unit[]>>((result, unit) => {
-    const key = unit.Cost;
+  // Group units by cost (string keys keep the type uniform with groupedByTrait)
+  const groupedByCost = units.reduce<Record<string, Unit[]>>((result, unit) => {
+    const key = String(unit.cost);
     if (!result[key]) {
       result[key] = [];
     }
@@ -28,9 +28,9 @@ export default function NewTeamUnitOverview({
   // Group units by trait
   const groupedByTrait = units.reduce<Record<string, Unit[]>>(
     (result, unit) => {
-      if (unit.Traits && unit.Traits.length > 0) {
-        unit.Traits.forEach((trait) => {
-          const key = trait.Name;
+      if (unit.traits && unit.traits.length > 0) {
+        unit.traits.forEach((trait) => {
+          const key = trait.name;
           if (!result[key]) {
             result[key] = [];
           }
@@ -42,18 +42,17 @@ export default function NewTeamUnitOverview({
     {}
   );
 
-  // Sort by cost within trait
+  // Sort by cost within trait group
   Object.keys(groupedByTrait).forEach((key) =>
-    groupedByTrait[key].sort((a, b) => a.Cost - b.Cost)
+    groupedByTrait[key].sort((a, b) => a.cost - b.cost)
   );
 
-  // Determine which grouping is active
   const activeGrouping = sortByTrait ? groupedByTrait : groupedByCost;
 
   return (
     <div className="overflow-y-auto min-w-12 lg:w-96 lg:flex-shrink-0 no-scrollbar h-full">
       {units.length ? (
-        Object.keys(activeGrouping).map((key: any) => {
+        Object.keys(activeGrouping).map((key: string) => {
           return (
             <NewTeamUnitContainer
               units={activeGrouping[key]}
