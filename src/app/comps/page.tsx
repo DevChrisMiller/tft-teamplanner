@@ -28,20 +28,22 @@ async function CompsList({
     ...(set ? { setId: set } : {}),
   };
 
-  const [teams, total, allUnits] = await Promise.all([
-    prisma.team.findMany({
-      where,
-      include: {
-        units: true,
-        user: { select: { name: true, image: true } },
-        ...(userId
-          ? { upvotes: { where: { userId }, select: { userId: true } } }
-          : {}),
+  const teams = await prisma.team.findMany({
+    where,
+    include: {
+      units: true,
+      user: { select: { name: true, image: true } },
+      upvotes: {
+        where: { userId: userId ?? "\0" },
+        select: { userId: true },
       },
-      orderBy: { upvoteCount: "desc" },
-      skip: (page - 1) * limit,
-      take: limit,
-    }),
+    },
+    orderBy: { upvoteCount: "desc" },
+    skip: (page - 1) * limit,
+    take: limit,
+  });
+
+  const [total, allUnits] = await Promise.all([
     prisma.team.count({ where }),
     fetchUnits(DEFAULT_SET_KEY),
   ]);
@@ -50,9 +52,7 @@ async function CompsList({
 
   const comps: CompTeam[] = teams.map((team) => ({
     ...team,
-    hasUpvoted: userId
-      ? (team.upvotes as { userId: string }[] | undefined)?.length === 1
-      : false,
+    hasUpvoted: team.upvotes.length === 1,
     upvotes: undefined,
   }));
 

@@ -39,7 +39,7 @@ export default async function PublicTeamPage({ params }: PageProps) {
   const unitMap = new Map(allUnits.map((u) => [u.id, u]));
 
   const teamSlots: (Unit | null)[] = Array(10).fill(null);
-  team.units.forEach((slot) => {
+  team.units.forEach((slot: { unitId: string; slotIndex: number }) => {
     const unit = unitMap.get(slot.unitId);
     if (unit && slot.slotIndex >= 0 && slot.slotIndex <= 9) {
       teamSlots[slot.slotIndex] = unit;
@@ -109,14 +109,6 @@ export default async function PublicTeamPage({ params }: PageProps) {
           <h2 className="text-sm font-semibold text-neutral-400 mb-2 uppercase tracking-wide">
             Traits
           </h2>
-          <div className="flex flex-wrap gap-2">
-            {filledUnits
-              .flatMap((u) => u.traits)
-              .reduce<Record<string, number>>((acc, trait) => {
-                acc[trait.name] = (acc[trait.name] ?? 0) + 1;
-                return acc;
-              }, {})}
-          </div>
           <TraitList units={filledUnits} />
         </div>
       )}

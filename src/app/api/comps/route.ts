@@ -17,28 +17,26 @@ export async function GET(request: Request) {
     ...(set ? { setId: set } : {}),
   };
 
-  const [teams, total] = await prisma.$transaction([
-    prisma.team.findMany({
-      where,
-      include: {
-        units: true,
-        user: { select: { name: true, image: true } },
-        ...(userId
-          ? { upvotes: { where: { userId }, select: { userId: true } } }
-          : {}),
+  const teams = await prisma.team.findMany({
+    where,
+    include: {
+      units: true,
+      user: { select: { name: true, image: true } },
+      upvotes: {
+        where: { userId: userId ?? "\0" },
+        select: { userId: true },
       },
-      orderBy: { upvoteCount: "desc" },
-      skip: (page - 1) * limit,
-      take: limit,
-    }),
-    prisma.team.count({ where }),
-  ]);
+    },
+    orderBy: { upvoteCount: "desc" },
+    skip: (page - 1) * limit,
+    take: limit,
+  });
+
+  const total = await prisma.team.count({ where });
 
   const result = teams.map((team) => ({
     ...team,
-    hasUpvoted: userId
-      ? (team.upvotes as { userId: string }[] | undefined)?.length === 1
-      : false,
+    hasUpvoted: team.upvotes.length === 1,
     upvotes: undefined,
   }));
 

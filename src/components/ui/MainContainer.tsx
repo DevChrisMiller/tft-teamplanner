@@ -199,7 +199,14 @@ export default function MainContainer() {
           </div>
         ) : (
           <>
-            <TeamsContainerHeader handleCreatingTeam={handleCreatingTeam} />
+            <TeamsContainerHeader
+              handleCreatingTeam={handleCreatingTeam}
+              allUnits={allUnits}
+              handleLoadTeam={(team) => {
+                setCurrentTeam(team);
+                setCreatingTeam(true);
+              }}
+            />
             <div className="flex flex-col justify-center mx-auto p-6 text-center gap-2">
               <Image
                 src="/penguin-icon.png"
