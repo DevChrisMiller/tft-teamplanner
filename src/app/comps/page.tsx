@@ -9,24 +9,31 @@ import FilterBar from "./components/FilterBar";
 import CompsLoading from "./loading";
 
 interface PageProps {
-  searchParams: Promise<{ set?: string; page?: string }>;
+  searchParams: Promise<{ set?: string; page?: string; sort?: string }>;
 }
 
 async function CompsList({
   set,
   page,
   userId,
+  sort,
 }: {
-  set?: string;
+  set: string;
   page: number;
   userId: string | null;
+  sort: string;
 }) {
   const limit = 20;
 
   const where = {
     isPublic: true,
-    ...(set ? { setId: set } : {}),
+    ...(set !== "all" ? { setId: set } : {}),
   };
+
+  const orderBy =
+    sort === "new"
+      ? { createdAt: "desc" as const }
+      : { upvoteCount: "desc" as const };
 
   const teams = await prisma.team.findMany({
     where,
@@ -38,7 +45,7 @@ async function CompsList({
         select: { userId: true },
       },
     },
-    orderBy: { upvoteCount: "desc" },
+    orderBy,
     skip: (page - 1) * limit,
     take: limit,
   });
@@ -86,8 +93,10 @@ async function CompsList({
 export default async function CompsPage({ searchParams }: PageProps) {
   const session = await auth();
   const userId = session?.user?.id ?? null;
-  const { set, page: pageParam } = await searchParams;
+  const { set, page: pageParam, sort: sortParam } = await searchParams;
   const page = Math.max(1, parseInt(pageParam ?? "1", 10));
+  const effectiveSet = set ?? DEFAULT_SET_KEY;
+  const effectiveSort = sortParam ?? "top";
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col gap-6">
@@ -103,7 +112,7 @@ export default async function CompsPage({ searchParams }: PageProps) {
       </Suspense>
 
       <Suspense fallback={<CompsLoading />}>
-        <CompsList set={set} page={page} userId={userId} />
+        <CompsList set={effectiveSet} page={page} userId={userId} sort={effectiveSort} />
       </Suspense>
     </div>
   );
