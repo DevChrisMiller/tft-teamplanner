@@ -1,8 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import { Unit, Trait } from "@/d";
 import { getBgColor } from "@/utils/getBgColor";
 import { getBorderColor } from "@/utils/getBorderColor";
 import { motion } from "framer-motion";
+import { Tooltip } from "@nextui-org/react";
 
 interface Props {
   unit: Unit;
@@ -47,18 +50,17 @@ export default function UnitLarge({ unit, handleUpdateTeam, index }: Props) {
           )} bg-opacity-80 py-1`}
         >
           <div className="flex flex-row w-full justify-center gap-1">
-            {unit.traits.map((trait: Trait, i) => {
-              return (
+            {unit.traits.map((trait: Trait, i) => (
+              <Tooltip key={i} content={trait.name} size="sm" placement="top">
                 <Image
-                  className="mx-0.5"
+                  className="mx-0.5 cursor-default"
                   src={trait.imageUrl}
                   alt={trait.name}
                   height={16}
                   width={16}
-                  key={i}
                 />
-              );
-            })}
+              </Tooltip>
+            ))}
           </div>
         </div>
       </div>

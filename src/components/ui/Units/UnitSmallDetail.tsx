@@ -1,8 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import { Unit } from "@/d";
 import { motion } from "framer-motion";
 import { getBorderColor } from "@/utils/getBorderColor";
 import { getBgColor } from "@/utils/getBgColor";
+import { Tooltip } from "@nextui-org/react";
 
 interface Props {
   unit: Unit;
@@ -40,22 +43,21 @@ export default function UnitSmallDetail({
         </motion.div>
       </div>
       <div
-        className={`flex flex-row items-center ${getBgColor(
+        className={`flex flex-row items-center justify-center ${getBgColor(
           cost
-        )} rounded-lg justify-self-center bg-opacity-80 w-fit h-10 p-0.5 pt-5 -mt-4`}
+        )} rounded-lg mx-auto bg-opacity-80 w-fit h-10 p-0.5 pt-5 -mt-4`}
       >
-        {unit.traits.map((trait, i) => {
-          return (
+        {unit.traits.map((trait, i) => (
+          <Tooltip key={i} content={trait.name} size="sm" placement="bottom">
             <Image
-              className="mx-0.5"
+              className="mx-0.5 cursor-default"
               src={trait.imageUrl}
               alt={trait.name}
               height={16}
               width={16}
-              key={i}
             />
-          );
-        })}
+          </Tooltip>
+        ))}
       </div>
       <p className="text-xs break-normal">{unit.name}</p>
     </div>
