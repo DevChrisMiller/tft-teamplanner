@@ -299,7 +299,7 @@ export default function MainContainer() {
           </>
         )}
       </main>
-      <FloatingWindowOption />
+      <FloatingWindowOption currentTeam={currentTeam} />
     </>
   );
 }
