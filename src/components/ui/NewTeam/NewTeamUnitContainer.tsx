@@ -3,6 +3,8 @@ import UnitSmallDetail from "../Units/UnitSmallDetail";
 import Image from "next/image";
 import { Button } from "@nextui-org/react";
 import { getBgColor } from "@/utils/getBgColor";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCoins } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   units: Unit[];
@@ -22,11 +24,9 @@ export default function NewTeamUnitContainer({
   const cost: number = units[0]?.cost || 1;
   const numUnits: number = units.length;
 
-  // When grouped by trait, show that trait's icon; otherwise show the gold coin icon.
   const traitIconUrl = sortByTrait
     ? units[0].traits.find((trait) => trait.name === groupKey)?.imageUrl
     : null;
-  const groupingIconImg = traitIconUrl ?? "/general/gold-icon.webp";
 
   const handleAddAll = () => {
     // Collect all currently empty slot indices first, then fill them in order.
@@ -54,15 +54,18 @@ export default function NewTeamUnitContainer({
         } min-w-32 max-w-96 rounded-xl h-fit bg-opacity-40 flex flex-col p-0.5 mb-3 mr-2`}
       >
         <div className="flex flex-row m-2 justify-between items-center">
-          <div className="flex flex-row items-center">
-            <Image
-              className="mr-2"
-              src={groupingIconImg}
-              alt="grouping icon"
-              height={12}
-              width={20}
-              unoptimized={groupingIconImg.startsWith("https")}
-            />
+          <div className="flex flex-row items-center gap-2">
+            {traitIconUrl ? (
+              <Image
+                src={traitIconUrl}
+                alt="trait icon"
+                height={16}
+                width={16}
+                unoptimized
+              />
+            ) : (
+              <FontAwesomeIcon icon={faCoins} className="text-yellow-400 h-3 w-3" />
+            )}
             <span>{groupKey}</span>
           </div>
           <div className="flex flex-row gap-4 items-center">

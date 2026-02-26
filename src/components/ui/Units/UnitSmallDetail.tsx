@@ -35,7 +35,7 @@ export default function UnitSmallDetail({
           <Image
             onClick={() => handleUpdateTeam(unit)}
             className="cursor-pointer object-cover"
-            src={unit.imageUrl}
+            src={unit.iconUrl}
             alt={unit.name}
             fill
             sizes="64px"

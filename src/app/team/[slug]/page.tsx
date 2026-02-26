@@ -126,6 +126,15 @@ export default async function PublicTeamPage({ params }: PageProps) {
   );
 }
 
+function tierBg(level: number): string {
+  if (level >= 5) return "bg-orange-500";  // unique/legendary
+  if (level >= 4) return "bg-purple-700";  // prismatic
+  if (level >= 3) return "bg-yellow-500";  // gold
+  if (level >= 2) return "bg-slate-400";   // silver
+  if (level >= 1) return "bg-amber-700";   // bronze
+  return "bg-neutral-700";
+}
+
 function getTraitLevel(trait: Trait, count: number) {
   const maxBreakpoint =
     trait.breakpoints.length > 0
@@ -137,14 +146,10 @@ function getTraitLevel(trait: Trait, count: number) {
     .find((bp) => count >= bp.count);
 
   if (activeBreakpoint) {
-    return {
-      level: activeBreakpoint.level,
-      nextBreakpoint: maxBreakpoint,
-      bgImage: activeBreakpoint.bgImage,
-    };
+    return { level: activeBreakpoint.level, nextBreakpoint: maxBreakpoint };
   }
 
-  return { level: 0, nextBreakpoint: maxBreakpoint, bgImage: trait.defaultBg };
+  return { level: 0, nextBreakpoint: maxBreakpoint };
 }
 
 function TraitList({ units }: { units: Unit[] }) {
@@ -156,8 +161,8 @@ function TraitList({ units }: { units: Unit[] }) {
 
   const traitArray = Object.entries(traitMap)
     .map(([name, { count, trait }]) => {
-      const { level, nextBreakpoint, bgImage } = getTraitLevel(trait, count);
-      return { name, count, level, nextBreakpoint, imageUrl: trait.imageUrl, bgImage };
+      const { level, nextBreakpoint } = getTraitLevel(trait, count);
+      return { name, count, level, nextBreakpoint, imageUrl: trait.imageUrl };
     })
     .sort((a, b) => {
       if (b.level !== a.level) return b.level - a.level;
@@ -167,21 +172,19 @@ function TraitList({ units }: { units: Unit[] }) {
   return (
     <div className="flex flex-wrap gap-3">
       {traitArray.map((trait) => (
-        <div key={trait.name} className="flex items-center gap-1">
-          <Image
-            src={`/traits/${trait.bgImage}`}
-            alt={trait.name}
-            height={32}
-            width={32}
-          />
-          <Image
-            src={trait.imageUrl}
-            alt={trait.name}
-            height={24}
-            width={24}
-            className={`-ml-8 ${trait.level > 0 ? "brightness-0" : ""}`}
-          />
-          <div className="flex flex-col text-xs ml-4 capitalize">
+        <div key={trait.name} className="flex items-center gap-2">
+          <div
+            className={`w-8 h-8 flex items-center justify-center rounded shrink-0 ${tierBg(trait.level)}`}
+          >
+            <Image
+              src={trait.imageUrl}
+              alt={trait.name}
+              height={20}
+              width={20}
+              className={trait.level > 0 ? "brightness-0" : "opacity-50"}
+            />
+          </div>
+          <div className="flex flex-col text-xs capitalize">
             <span>{trait.name}</span>
             <span className="text-neutral-400">
               {trait.count}/{trait.nextBreakpoint || trait.count}

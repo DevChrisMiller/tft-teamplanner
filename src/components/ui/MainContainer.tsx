@@ -13,6 +13,7 @@ import { Spinner } from "@nextui-org/react";
 import { Unit } from "@/d";
 import { useSession, signIn } from "next-auth/react";
 import { DEFAULT_SET_KEY } from "@/lib/setConfig";
+import Image from "next/image";
 
 interface SavedTeam {
   id: string;
@@ -280,6 +281,7 @@ export default function MainContainer() {
               </div>
             ) : savedTeams.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 gap-2 text-center">
+                <Image src="/penguin-icon.png" alt="pengu" height={128} width={128} className="opacity-70" />
                 <p className="text-lg font-semibold">No teams saved yet</p>
                 <p className="text-neutral-400 text-sm">
                   Click &quot;New Team&quot; to build and save your first comp.

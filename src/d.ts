@@ -1,14 +1,12 @@
 export interface TraitBreakpoint {
-  count: number;    // minUnits from CDragon effects
-  level: number;    // 1=bronze, 2=silver, 3=gold, 4=prismatic
-  bgImage: string;  // local file: "bronze_trait.avif", etc.
+  count: number;  // minUnits from CDragon effects
+  level: number;  // 1=bronze, 2=silver, 3=gold, 4=prismatic
 }
 
 export interface Trait {
-  id: string;         // CDragon apiName e.g. "TFT13_Rebel"
-  name: string;       // "Rebel"
-  imageUrl: string;   // CDragon CDN URL for the trait icon
-  defaultBg: string;  // local file: "empty_trait.avif"
+  id: string;        // CDragon apiName e.g. "TFT16_Sorcerer"
+  name: string;      // "Arcanist"
+  imageUrl: string;  // CDragon CDN URL for the trait icon
   breakpoints: TraitBreakpoint[];
 }
 

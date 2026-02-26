@@ -1,10 +1,10 @@
 import { Button, Input } from "@nextui-org/react";
-import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faLayerGroup } from "@fortawesome/free-solid-svg-icons";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
+import { faCoins } from "@fortawesome/free-solid-svg-icons";
 import { Switch } from "@nextui-org/react";
 import { Unit } from "@/d";
 import { encodeTeamCode } from "@/lib/teamCode";
@@ -59,12 +59,7 @@ export default function NewTeamOptions({
           isSelected ? (
             <FontAwesomeIcon icon={faLayerGroup} className="text-blue-500" />
           ) : (
-            <Image
-              src="/general/gold-icon.webp"
-              alt="gold icon"
-              height={20}
-              width={20}
-            />
+            <FontAwesomeIcon icon={faCoins} className="text-yellow-400" />
           )
         }
       />

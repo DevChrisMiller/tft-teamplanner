@@ -22,19 +22,14 @@ function cdragAssetToUrl(path: string): string {
   return `${CDRAGON_BASE}/plugins/rcp-be-lol-game-data/global/default/${normalized}`;
 }
 
-// Maps CDragon trait effect style values to local medal hex background images.
-function styleToBgImage(style: number): string {
-  if (style >= 7) return "unique_trait.avif";
-  if (style >= 5) return "gold_trait.avif";
-  if (style >= 3) return "silver_trait.avif";
-  return "bronze_trait.avif";
-}
-
+// Maps CDragon trait effect style values to tier levels.
+// style 1 = bronze, 3 = silver, 4 = unique (solo legendary), 5 = gold, 7 = prismatic
 function styleToLevel(style: number): number {
-  if (style >= 7) return 4;
-  if (style >= 5) return 3;
-  if (style >= 3) return 2;
-  return 1;
+  if (style >= 7) return 4;  // prismatic
+  if (style >= 5) return 3;  // gold
+  if (style === 4) return 5; // unique/legendary (single-unit trait, e.g. Glutton, Emperor)
+  if (style >= 3) return 2;  // silver
+  return 1;                   // bronze
 }
 
 async function fetchTFTData(): Promise<CDragonTFTData> {
@@ -77,14 +72,12 @@ function transformTrait(cdTrait: CDragonTrait): Trait {
   const breakpoints: TraitBreakpoint[] = (cdTrait.effects ?? []).map((effect) => ({
     count: effect.minUnits,
     level: styleToLevel(effect.style),
-    bgImage: styleToBgImage(effect.style),
   }));
 
   return {
     id: cdTrait.apiName,
     name: cdTrait.name,
     imageUrl: cdragAssetToUrl(cdTrait.icon),
-    defaultBg: "empty_trait.avif",
     breakpoints,
   };
 }
@@ -97,11 +90,10 @@ function transformChampion(
     .map((name) => traitMap.get(name))
     .filter((t): t is Trait => t !== undefined);
 
-  // tileIcon = small HUD square (best for unit cards in team planner)
-  // squareIcon = larger splash crop (good for detail views)
-  // icon = centered splash (full art, widest)
-  const imageUrl = cdragAssetToUrl(cdChamp.tileIcon ?? cdChamp.squareIcon ?? cdChamp.icon);
-  const iconUrl = cdragAssetToUrl(cdChamp.tileIcon ?? cdChamp.icon);
+  // imageUrl → squareIcon for larger display contexts (UnitLarge grid cells)
+  // iconUrl  → tileIcon for small display contexts (UnitSmallDetail 64px cards)
+  const imageUrl = cdragAssetToUrl(cdChamp.squareIcon ?? cdChamp.tileIcon ?? cdChamp.icon);
+  const iconUrl = cdragAssetToUrl(cdChamp.tileIcon ?? cdChamp.squareIcon ?? cdChamp.icon);
 
   return {
     id: cdChamp.apiName,
