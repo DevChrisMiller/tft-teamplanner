@@ -265,6 +265,7 @@ export default function MainContainer() {
 
             {!session ? (
               <div className="flex flex-col items-center justify-center py-16 gap-3 text-center">
+                <Image src="/penguin-icon.png" alt="pengu" height={128} width={128} className="opacity-70" />
                 <p className="text-neutral-400">
                   Sign in to save and manage your teams.
                 </p>

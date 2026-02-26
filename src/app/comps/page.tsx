@@ -34,7 +34,7 @@ async function CompsList({
       units: true,
       user: { select: { name: true, image: true } },
       upvotes: {
-        where: { userId: userId ?? "\0" },
+        where: { userId: userId ?? "" },
         select: { userId: true },
       },
     },
