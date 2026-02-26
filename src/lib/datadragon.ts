@@ -145,9 +145,10 @@ export async function fetchUnits(setKey = DEFAULT_SET_KEY): Promise<Unit[]> {
     setData.traits.map((t) => [t.name, transformTrait(t)])
   );
 
-  // Filter to standard playable champions (cost 1-6, skip no-cost tutorial units etc.)
+  // Filter to standard playable champions: cost 1-6 and at least one trait.
+  // Non-playable entries (Training Dummy, Golem, Elder Dragon, etc.) have an empty traits array.
   const units = setData.champions
-    .filter((c) => c.cost >= 1 && c.cost <= 6)
+    .filter((c) => c.cost >= 1 && c.cost <= 6 && c.traits.length > 0)
     .map((c) => transformChampion(c, traitMap));
 
   setCached(cacheKey, units, CACHE_TTL_MS);
