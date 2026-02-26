@@ -17,23 +17,25 @@ interface Team {
   slug: string | null;
   setId: string;
   upvoteCount: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | string;
+  updatedAt: Date | string;
   units: TeamUnit[];
 }
 
 interface Props {
   teams: Team[];
   allUnits: Unit[];
+  onMutated?: () => void;
+  onEdit?: (teamId: string, name: string, units: (Unit | null)[]) => void;
 }
 
-export default function TeamGrid({ teams, allUnits }: Props) {
+export default function TeamGrid({ teams, allUnits, onMutated, onEdit }: Props) {
   const unitMap = new Map(allUnits.map((u) => [u.id, u]));
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="flex flex-col gap-2 w-full">
       {teams.map((team) => (
-        <TeamCard key={team.id} team={team} unitMap={unitMap} />
+        <TeamCard key={team.id} team={team} unitMap={unitMap} onMutated={onMutated} onEdit={onEdit} />
       ))}
     </div>
   );

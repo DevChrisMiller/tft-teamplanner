@@ -7,9 +7,10 @@ import { useState } from "react";
 interface Props {
   teamId: string;
   currentSlug: string | null;
+  onSuccess?: () => void;
 }
 
-export default function ShareTeamButton({ teamId, currentSlug }: Props) {
+export default function ShareTeamButton({ teamId, currentSlug, onSuccess }: Props) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -25,6 +26,7 @@ export default function ShareTeamButton({ teamId, currentSlug }: Props) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
       router.refresh();
+      onSuccess?.();
     } finally {
       setIsLoading(false);
     }
@@ -44,6 +46,7 @@ export default function ShareTeamButton({ teamId, currentSlug }: Props) {
     try {
       await fetch(`/api/teams/${teamId}/share`, { method: "DELETE" });
       router.refresh();
+      onSuccess?.();
     } finally {
       setIsLoading(false);
     }

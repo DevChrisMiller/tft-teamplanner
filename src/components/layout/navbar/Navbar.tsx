@@ -11,19 +11,19 @@ export default function Navbar() {
 
   return (
     <nav className="flex w-full justify-between max-w-7xl px-8 py-2 mx-auto">
-      <div className="flex items-center gap-2">
+      <Link href="/" className="flex items-center gap-2">
         <TFTPlannerLogo />
         <h1 className="font-bold text-xl">tftuler</h1>
         <Chip variant="flat" size="sm" className="bg-blue-600/20 text-blue-500">
           Alpha
         </Chip>
-      </div>
+      </Link>
 
       <div className="flex items-center gap-3">
         {session ? (
           <>
             <Link
-              href="/my-teams"
+              href="/"
               className="text-sm text-neutral-300 hover:text-white transition-colors"
             >
               My Teams

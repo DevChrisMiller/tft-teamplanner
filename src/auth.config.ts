@@ -9,12 +9,7 @@ export const authConfig: NextAuthConfig = {
     error: "/login",
   },
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const isProtected = nextUrl.pathname.startsWith("/my-teams");
-      if (isProtected && !isLoggedIn) {
-        return Response.redirect(new URL("/login", nextUrl));
-      }
+    authorized() {
       return true;
     },
   },

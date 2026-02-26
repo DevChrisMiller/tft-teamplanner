@@ -21,6 +21,7 @@ export async function GET() {
 interface CreateTeamBody {
   name: string;
   setId?: string;
+  description?: string | null;
   units: { unitId: string; slotIndex: number }[];
 }
 
@@ -42,6 +43,7 @@ export async function POST(request: Request) {
       name: body.name.trim(),
       userId: session.user.id,
       setId: body.setId ?? "TFT16",
+      ...(body.description != null && { description: body.description }),
       units: {
         create: body.units.map((u) => ({
           unitId: u.unitId,

@@ -5,7 +5,7 @@ import Image from "next/image";
 import { getBgColor } from "@/utils/getBgColor";
 import { getBorderColor } from "@/utils/getBorderColor";
 import type { Metadata } from "next";
-import type { Unit } from "@/d";
+import type { Unit, Trait } from "@/d";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!team) return { title: "Team Not Found" };
   return {
     title: `${team.name} — TFT Team`,
-    description: `View this TFT team composition: ${team.name}`,
+    description: team.description ?? `View this TFT team composition: ${team.name}`,
   };
 }
 
@@ -70,6 +70,16 @@ export default async function PublicTeamPage({ params }: PageProps) {
         <span className="ml-auto text-sm text-neutral-500">{team.setId}</span>
       </div>
 
+      {/* Notes / description */}
+      {team.description && (
+        <div className="bg-neutral-800 rounded-xl px-4 py-3">
+          <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-1">
+            Notes
+          </p>
+          <p className="text-sm text-neutral-200 whitespace-pre-wrap">{team.description}</p>
+        </div>
+      )}
+
       {/* Team grid */}
       <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
         {teamSlots.map((unit, i) => (
@@ -116,24 +126,67 @@ export default async function PublicTeamPage({ params }: PageProps) {
   );
 }
 
-function TraitList({ units }: { units: Unit[] }) {
-  const traitCounts = units
-    .flatMap((u) => u.traits)
-    .reduce<Record<string, { count: number; imageUrl: string }>>((acc, trait) => {
-      if (!acc[trait.name]) acc[trait.name] = { count: 0, imageUrl: trait.imageUrl };
-      acc[trait.name].count += 1;
-      return acc;
-    }, {});
+function getTraitLevel(trait: Trait, count: number) {
+  const maxBreakpoint =
+    trait.breakpoints.length > 0
+      ? trait.breakpoints[trait.breakpoints.length - 1].count
+      : 0;
 
-  const sorted = Object.entries(traitCounts).sort((a, b) => b[1].count - a[1].count);
+  const activeBreakpoint = [...trait.breakpoints]
+    .reverse()
+    .find((bp) => count >= bp.count);
+
+  if (activeBreakpoint) {
+    return {
+      level: activeBreakpoint.level,
+      nextBreakpoint: maxBreakpoint,
+      bgImage: activeBreakpoint.bgImage,
+    };
+  }
+
+  return { level: 0, nextBreakpoint: maxBreakpoint, bgImage: trait.defaultBg };
+}
+
+function TraitList({ units }: { units: Unit[] }) {
+  const traitMap: Record<string, { count: number; trait: Trait }> = {};
+  units.flatMap((u) => u.traits).forEach((trait) => {
+    if (!traitMap[trait.name]) traitMap[trait.name] = { count: 0, trait };
+    traitMap[trait.name].count += 1;
+  });
+
+  const traitArray = Object.entries(traitMap)
+    .map(([name, { count, trait }]) => {
+      const { level, nextBreakpoint, bgImage } = getTraitLevel(trait, count);
+      return { name, count, level, nextBreakpoint, imageUrl: trait.imageUrl, bgImage };
+    })
+    .sort((a, b) => {
+      if (b.level !== a.level) return b.level - a.level;
+      return b.count - a.count;
+    });
 
   return (
     <div className="flex flex-wrap gap-3">
-      {sorted.map(([name, { count, imageUrl }]) => (
-        <div key={name} className="flex items-center gap-1 bg-neutral-800 rounded-lg px-2 py-1">
-          <Image src={imageUrl} alt={name} width={16} height={16} />
-          <span className="text-xs capitalize">{name}</span>
-          <span className="text-xs text-neutral-400">×{count}</span>
+      {traitArray.map((trait) => (
+        <div key={trait.name} className="flex items-center gap-1">
+          <Image
+            src={`/traits/${trait.bgImage}`}
+            alt={trait.name}
+            height={32}
+            width={32}
+          />
+          <Image
+            src={trait.imageUrl}
+            alt={trait.name}
+            height={24}
+            width={24}
+            className={`-ml-8 ${trait.level > 0 ? "brightness-0" : ""}`}
+          />
+          <div className="flex flex-col text-xs ml-4 capitalize">
+            <span>{trait.name}</span>
+            <span className="text-neutral-400">
+              {trait.count}/{trait.nextBreakpoint || trait.count}
+            </span>
+          </div>
         </div>
       ))}
     </div>
