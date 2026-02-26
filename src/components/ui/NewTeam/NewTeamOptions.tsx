@@ -32,14 +32,14 @@ export default function NewTeamOptions({
   };
 
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-wrap gap-2">
       <Input
         type="text"
         placeholder="Search..."
         size="sm"
         radius="lg"
         color="default"
-        className="w-96 mr-2"
+        className="flex-1 min-w-32 max-w-96"
         onChange={(e) => {
           handleUpdateSearch(e.target.value);
         }}

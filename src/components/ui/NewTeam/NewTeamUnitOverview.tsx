@@ -50,7 +50,7 @@ export default function NewTeamUnitOverview({
   const activeGrouping = sortByTrait ? groupedByTrait : groupedByCost;
 
   return (
-    <div className="overflow-y-auto min-w-12 lg:w-96 lg:flex-shrink-0 no-scrollbar h-full">
+    <div className="overflow-y-auto min-w-12 lg:w-96 lg:flex-shrink-0 no-scrollbar h-72 lg:h-full">
       {units.length ? (
         Object.keys(activeGrouping).map((key: string) => {
           return (

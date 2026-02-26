@@ -13,7 +13,7 @@ export default function NewTeamNameInput({ value, onChange }: Props) {
       size="sm"
       radius="lg"
       color="default"
-      className="w-64 mx-2 text-white"
+      className="flex-1 min-w-0 mx-2 text-white"
       value={value}
       onValueChange={onChange}
       maxLength={40}

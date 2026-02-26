@@ -170,7 +170,7 @@ function TraitList({ units }: { units: Unit[] }) {
     });
 
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
       {traitArray.map((trait) => (
         <div key={trait.name} className="flex items-center gap-2">
           <div

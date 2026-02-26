@@ -64,10 +64,37 @@ export default function NewTeamTraitContainer({ currentTeam }: Props) {
       return b.count - a.count;
     });
 
+  const hasUnits = currentTeam.some((u) => u !== null);
+
   return (
     <>
-      <div className="flex flex-col flex-shrink-0 min-w-32 h-full overflow-y-auto no-scrollbar">
-        {currentTeam.some((u) => u !== null) && traitArray.length > 0
+      {/* Mobile: compact horizontal wrap of trait badges */}
+      {hasUnits && traitArray.length > 0 && (
+        <div className="flex lg:hidden flex-row flex-wrap gap-x-3 gap-y-2 px-1">
+          {traitArray.map((trait, i) => (
+            <div key={i} className="flex items-center gap-1">
+              <div
+                className={`w-6 h-6 flex items-center justify-center rounded shrink-0 ${tierBg(trait.level)}`}
+              >
+                <Image
+                  src={trait.imageUrl}
+                  alt={trait.name}
+                  height={14}
+                  width={14}
+                  className={trait.level > 0 ? "brightness-0" : "opacity-50"}
+                />
+              </div>
+              <span className="text-xs text-neutral-300 capitalize">
+                {trait.count}/{trait.nextBreakpoint || trait.count}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Desktop: vertical sidebar */}
+      <div className="hidden lg:flex flex-col flex-shrink-0 min-w-32 h-full overflow-y-auto no-scrollbar">
+        {hasUnits && traitArray.length > 0
           ? traitArray.map((trait, i) => (
               <div key={i} className="flex items-center m-2">
                 <div

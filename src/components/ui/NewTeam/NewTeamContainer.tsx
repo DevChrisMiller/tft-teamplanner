@@ -11,12 +11,12 @@ export default function NewTeamContainer({
   handleUpdateTeam,
 }: Props) {
   return (
-    <div className="grid lg:grid-cols-5 sm:grid-cols-1 md:grid-cols-3 gap-4 m-2 w-full h-full overflow-y-auto no-scrollbar">
+    <div className="grid grid-cols-3 lg:grid-cols-5 gap-2 lg:gap-4 m-1 lg:m-2 flex-1 min-w-0 lg:h-full overflow-y-auto no-scrollbar">
       {currentTeam.map((unit, i) => {
         return (
           <div
             key={i}
-            className="flex items-center justify-center w-26 h-40 rounded-large bg-neutral-800"
+            className="flex items-center justify-center min-w-0 h-28 lg:h-40 rounded-large bg-neutral-800"
           >
             {unit ? (
               <UnitLarge

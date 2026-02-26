@@ -185,7 +185,7 @@ export default function MainContainer() {
 
   if (isLoading) {
     return (
-      <main className="bg-neutral-900 rounded-3xl w-full p-2 lg:p-6 md:p-4 sm:p-2 flex flex-col h-full">
+      <main className="bg-neutral-900 rounded-3xl w-full px-0 py-2 md:p-4 lg:p-6 flex flex-col h-full">
         <div className="flex items-center justify-center h-full w-full">
           <Spinner size="lg" />
         </div>
@@ -195,7 +195,7 @@ export default function MainContainer() {
 
   if (error) {
     return (
-      <main className="bg-neutral-900 rounded-3xl w-full p-2 lg:p-6 md:p-4 sm:p-2 flex flex-col h-full">
+      <main className="bg-neutral-900 rounded-3xl w-full px-0 py-2 md:p-4 lg:p-6 flex flex-col h-full">
         <div className="flex flex-col items-center justify-center h-full gap-2">
           <p className="text-red-400 font-medium">Failed to load game data</p>
           <p className="text-neutral-500 text-sm">{error}</p>
@@ -206,7 +206,7 @@ export default function MainContainer() {
 
   return (
     <>
-      <main className="bg-neutral-900 rounded-3xl w-full p-2 lg:p-6 md:p-4 sm:p-2 flex flex-col gap-4 h-full">
+      <main className="bg-neutral-900 rounded-3xl w-full px-0 py-2 md:p-4 lg:p-6 flex flex-col gap-4 h-full">
         {creatingTeam ? (
           <div className="flex flex-col gap-4 h-full">
             <NewTeamContainerHeader
@@ -238,7 +238,7 @@ export default function MainContainer() {
               sortByTrait={sortByTrait}
               currentTeam={currentTeam}
             />
-            <div className="flex flex-row gap-2 h-[600px]">
+            <div className="flex flex-col lg:flex-row gap-2 lg:h-[600px]">
               <NewTeamUnitOverview
                 handleUpdateTeam={handleUpdateTeam}
                 currentTeam={currentTeam}
