@@ -46,7 +46,7 @@ export async function POST(_req: Request, { params }: RouteContext) {
   }
 
   const team = await prisma.team.update({
-    where: { id },
+    where: { id, userId: session.user.id },
     data: { isPublic: true, slug },
   });
 

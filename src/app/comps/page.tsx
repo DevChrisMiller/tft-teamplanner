@@ -6,6 +6,7 @@ import { DEFAULT_SET_KEY } from "@/lib/setConfig";
 import type { Unit } from "@/d";
 import CompCard, { type CompTeam } from "./components/CompCard";
 import FilterBar from "./components/FilterBar";
+import Pagination from "./components/Pagination";
 import CompsLoading from "./loading";
 
 interface PageProps {
@@ -80,11 +81,9 @@ async function CompsList({
       )}
 
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          <span className="text-sm text-neutral-400">
-            Page {page} of {totalPages} &mdash; {total} comps
-          </span>
-        </div>
+        <Suspense>
+          <Pagination page={page} totalPages={totalPages} total={total} />
+        </Suspense>
       )}
     </div>
   );
